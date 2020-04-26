@@ -1,0 +1,72 @@
+
+
+.icon-right{
+  position: relative;
+  width: 8px;
+  height: 16px;
+  line-height: 16px;
+  &:before,
+  &:after{
+    top:50%;
+    right: 0px;
+    position: absolute;
+    -webkit-transform-origin: right center;
+    transform-origin: right center;
+    width: 9px;
+    height: 1px;
+    overflow: hidden;
+    background-color: #c8c7cc;
+    display: block;
+    content: "";
+  }
+  &:before{
+    transform: rotate(45deg);
+  }
+  &:after{
+    transform: rotate(-45deg);
+  }
+}
+
+.icon-left{
+  position: relative;
+  width: 8px;
+  height: 16px;
+  line-height: 16px;
+  &:before,
+  &:after{
+    position: absolute;
+    left: 5px;
+    top: 22px;
+    -webkit-transform-origin: left center;
+    transform-origin: left center;
+    width: 10px;
+    height: 1px;
+    overflow: hidden;
+    background-color: #c8c7cc;
+    display: block;
+    content: " ";
+  }
+  &:before{
+    transform: rotate(45deg);
+  }
+  &:after{
+    transform: rotate(-45deg);
+  }
+}
+
+.icon-base{
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+// .icon-tiaoxuan-module{
+//   &:extend(.icon-base);
+//   background-image: url('../../../assets/images/tiaoxuan_2x.png')
+// }
+
+
+
+
+
+
+
