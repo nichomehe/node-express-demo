@@ -1,13 +1,21 @@
 let jsonData = (res,data) => {
-    console.log("json====",JSON.stringify(data))
     let result = {
         code:0,
-        msg:"",
-        data:data
+        msg:typeof data == 'string'? data:'',
+        data:typeof data == 'string'?{}:data
     }
     res.json(result)
 }
 
+let errorData = (res,msg) => {
+    let result = {
+        code:1,
+        msg:msg,
+        data:{}
+    }
+    res.json(result)
+} 
 module.exports = {
-    jsonData
+    jsonData,
+    errorData
 }

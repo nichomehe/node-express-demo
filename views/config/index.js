@@ -10,21 +10,16 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      // '/webapi': {
-      //   target: 'http://10.0.9.60:3000',
-      //   changeOrigin: true,
-      //   cookieDomainRewrite:""
-      // },
+
     },
 
     // Various Dev Server settings
     host: '10.0.9.60', // can be overwritten by process.env.HOST
-    port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: 8082, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
-    useMock:true, // 是否使用mock数据
     
     /**
      * Source Maps

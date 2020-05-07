@@ -8,7 +8,7 @@ const store = new Vuex.Store({
         user:user
     },
     state: {
-      routerState: ''
+
     },
     mutations: {},
     actions: {}

@@ -2,52 +2,40 @@
     <div class="layout width-100 height-100">
          <Layout class="main width-100 height-100">
             <Header>
-                <Menu mode="horizontal" theme="dark" active-name="1">
-                    <div class="layout-logo">
-                        <Icon type="md-cloud-circle" />
-                        <span class="f-20">Node Demo</span>
-                    </div>
-                </Menu>
+                <div class="layout-logo">
+                    <Icon type="md-cloud-circle" />
+                    <span class="f-20">Node Demo</span>
+                </div>
             </Header>
             <Layout>
-                <Sider ref="side" breakpoint="md" hide-trigger collapsible :collapsed-width="100" v-model="collapsed" :style="{background: '#fff'}">
-                    <Menu active-name="2-1" theme="light" width="auto" accordion :open-names="['2']">
-                        <Submenu name="1">
+                <Sider ref="side" breakpoint="md" hide-trigger collapsible :collapsed-width="100"  :style="{background: '#fff'}">
+                    <Menu :active-name="activeMenuName" theme="light" width="auto" accordion>
+                        <Submenu :name="item.name" v-for="(item,index) in menuList" :key="index">
                             <template slot="title">
-                                <Icon type="ios-navigate"></Icon>
-                                Item 1
+                                <Icon :type="item.icon || 'ios-navigate'"></Icon>
+                                {{item.meta.title}}
                             </template>
-                            <Submenu name="1-1" class="margin-left-15">
-                                <template slot="title">
-                                    Item 1-1
+                            <template v-if="item.children && item.children.length">
+                                <template v-for="(cItem,cIndex) in item.children">
+                                    <Submenu v-if="cItem.children && cItem.children.length" :name="cItem.name" class="margin-left-15" :key="'c'+cIndex">
+                                        <template slot="title">
+                                            {{cItem.meta.title}}
+                                        </template>
+                                        <template v-if="cItem.children && cItem.children.length">
+                                            <MenuItem :name="ccItem.name" v-for="(ccItem,ccIndex) in cItem.children" :key="'cc'+ccIndex"  @click.native="sideMenuClick(ccItem)">{{ccItem.meta.title}}</MenuItem>
+                                        </template>
+                                    </Submenu>
+                                    <MenuItem v-else :name="cItem.name"  :key="'c'+cIndex" @click.native="sideMenuClick(cItem)">{{cItem.meta.title}}</MenuItem>
                                 </template>
-                                <MenuItem name="1-1-1">Option 2</MenuItem>
-
-                            </Submenu>
-                            <MenuItem name="1-2">Option 2</MenuItem>
-                            <MenuItem name="1-3">Option 3</MenuItem>
-                        </Submenu>
-                        <Submenu name="2">
-                            <template slot="title">
-                                <Icon type="ios-keypad"></Icon>
-                                <span>Item2</span>
                             </template>
-                            <MenuItem name="2-1">Option 1</MenuItem>
-                            <MenuItem name="2-2">Option 2</MenuItem>
-                        </Submenu>
-                        <Submenu name="3">
-                            <template slot="title">
-                                <Icon type="ios-analytics"></Icon>
-                                Item 3
-                            </template>
-                            <MenuItem name="3-1">Option 1</MenuItem>
-                            <MenuItem name="3-2">Option 2</MenuItem>
                         </Submenu>
                     </Menu>
                 </Sider>
                 <Layout >
-                    <Content :style="{margin:'24px',padding: '24px', minHeight: '280px', background: '#fff'}">
-                        Content
+                    <Content :style="{margin:'24px', minHeight: '280px', background: '#fff'}" class="flex-column">
+                        <div class="flex-1 width-100">
+                             <router-view class=" width-100 height-100 router-main"  id="viewBox"/>
+                        </div>
                     </Content>
                 </Layout>
             </Layout>
@@ -59,14 +47,24 @@ export default {
   name: "Main",
   data() {
     return {
-      collapsed: false
+    //   collapsed: false,
+      activeMenuName:'pageOne',
     };
   },
   methods: {
-
+    sideMenuClick(routerItem){
+        // debugger
+        this.activeMenuName = routerItem.name
+        this.$router.push({name:routerItem.name})
+    }
+  },
+  computed:{
+    menuList(){
+        return this.$store.state.user.menuList
+    }
   },
   mounted() {
-      console.log(this.$store.state.user.name)
+      
   }
 };
 </script>
@@ -98,6 +96,9 @@ export default {
     }
     .layout-footer-center{
         text-align: center;
+    }
+    .router-main{
+        overflow: auto;
     }
 }
 

@@ -7,7 +7,7 @@ var logger = require('morgan');
 var ejs = require('ejs');
 var userApi = require('./controller/user');
 
-var useMock = true
+var useMock = true  //是否使用mock数据
 
 
 var app = express();
@@ -33,7 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.all('*', (req, res, next) => {
   const { origin, Origin, referer, Referer } = req.headers;
   const allowOrigin = origin || Origin || referer || Referer || '*';
-  res.header("Access-Control-Allow-Origin",allowOrigin  );  //允许跨域
+  res.header("Access-Control-Allow-Origin","*"  );  //允许跨域
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
   res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
   res.header("Access-Control-Allow-Credentials", true); //可以带cookies

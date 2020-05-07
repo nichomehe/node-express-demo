@@ -1,15 +1,47 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '@/store/index'
 import Main from '@/components/Main'
+import HelloWorld from '@/components/HelloWorld'
+import Login from '@/pages/login'
+
 
 Vue.use(Router)
 
-export default new Router({
+let router =  new Router({
   routes: [
     {
+      path: '/login',
+      name: 'login',
+      component: Login
+    },
+    {
       path: '/',
-      name: 'Main',
-      component: Main
+      name: 'index',
+      component: Main,
+      redirect:'/home',
+      children:[
+        {
+          path: '/home',
+          name: 'home',
+          component: HelloWorld
+        }
+      ]
     }
   ]
 })
+// 路由跳转前的拦击
+router.beforeEach((to, from, next) => {
+  if (store.state.user.menuList || to.name == 'login') {
+    next()
+  } else {
+    store.dispatch('getMenuList').then(res => {
+      router.addRoutes(res)
+      next({ path: to.redirectedFrom || to.path })
+    })
+  }
+})
+
+
+
+export default router

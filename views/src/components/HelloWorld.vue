@@ -17,7 +17,7 @@ export default {
   methods:{
     init() {
       this.$fetch({
-        url:'http://192.168.1.39:3000/user/getUserList',
+        url:'http://127.0.0.1:3000/user/getUserList',
         method:'post',
         headers:{
 

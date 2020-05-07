@@ -1,0 +1,34 @@
+{
+    "code":0,
+    "msg":"",
+    "data":[
+        {
+            "id":1,
+            "name":"oneBase",
+            "title":"分类一一",
+            "parent_id":"",
+            "actions":[1,2]
+        },
+        {
+            "id":2,
+            "name":"pageOne",
+            "title":"页面一一",
+            "parent_id":"1",
+            "actions":[1,2]
+        },
+        {
+            "id":3,
+            "name":"twoBase",
+            "title":"分类二二",
+            "parent_id":"",
+            "actions":[1,2]
+        },
+        {
+            "id":4,
+            "name":"pageTwo",
+            "title":"页面二二",
+            "parent_id":"3",
+            "actions":[1,2]
+        }
+    ]
+}
