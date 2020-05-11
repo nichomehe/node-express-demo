@@ -3,7 +3,7 @@
          <Layout class="main width-100 height-100">
             <Header>
                 <div class="layout-logo">
-                    <Icon type="md-cloud-circle" />
+                    <Icon type="md-sunny" />
                     <span class="f-20">Node Demo</span>
                 </div>
                 <div class="header-user">Welcome {{userName}}~</div>

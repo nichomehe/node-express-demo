@@ -61,7 +61,7 @@ module.exports = {
                 }
                 if (result) {
                     if(result.length){
-                        RoleModel.getRoles(result[0].role).then((res)=>{
+                        RoleModel.getRoles(result[0].role).then(res=>{
                             let roles = res
                             let pageIds = []
                             roles.forEach(item=>{
@@ -79,7 +79,7 @@ module.exports = {
                             }).catch(err=>{
                                 reject(err)
                             })
-                        }).catch((err)=>{
+                        }).catch(err=>{
                             reject(err) 
                         })
     
