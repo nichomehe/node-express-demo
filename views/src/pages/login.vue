@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+
 export default {
   name: 'login',
   data () {
@@ -39,6 +41,7 @@ export default {
     }
   },
   methods:{
+    ...mapMutations(['setMenuList','setUserInfo']),
     handleSubmit() {
         this.$refs.userInfo.validate((valid) => {
             if (valid) {
@@ -55,9 +58,12 @@ export default {
             data:this.userInfo
         }).then((res=>{
             if(!res.data.code){
-                this.$Message.success('登陆成功!');
+                this.$Message.success('登陆成功!')
+                this.setUserInfo(res.data.data[0])
+                localStorage.setItem('uid',res.data.data[0].id)
+                localStorage.setItem('name',res.data.data[0].name)
                 let timer = setTimeout(()=>{
-                    this.$router.push({name:"index"})
+                    this.$router.push({name:"home"})
                     timer = null
                 },1500)
             }else{
@@ -66,9 +72,8 @@ export default {
         }))
     }
   },
-
   mounted(){
-    
+    this.setMenuList(null)
   }
 
 }

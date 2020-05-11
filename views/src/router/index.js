@@ -19,7 +19,6 @@ let router =  new Router({
       path: '/',
       name: 'index',
       component: Main,
-      redirect:'/home',
       children:[
         {
           path: '/home',
@@ -35,6 +34,10 @@ router.beforeEach((to, from, next) => {
   if (store.state.user.menuList || to.name == 'login') {
     next()
   } else {
+    if(!localStorage.getItem('uid')){
+      next({ path: '/login' })
+      return
+    }
     store.dispatch('getMenuList').then(res => {
       router.addRoutes(res)
       next({ path: to.redirectedFrom || to.path })

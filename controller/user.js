@@ -21,4 +21,12 @@ router.post('/getUserList', (request, result) => {
   })
 });
 
+router.post('/getMenuList', (request, result) => { 
+  userModel.getMenuList(request).then((res)=>{
+    jsonData(result,res)
+  }).catch((err)=>{
+    errorData(result,err)
+  })
+});
+
 module.exports = router;

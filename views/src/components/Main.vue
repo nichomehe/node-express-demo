@@ -6,6 +6,7 @@
                     <Icon type="md-cloud-circle" />
                     <span class="f-20">Node Demo</span>
                 </div>
+                <div class="header-user">Welcome {{userName}}~</div>
             </Header>
             <Layout>
                 <Sider ref="side" breakpoint="md" hide-trigger collapsible :collapsed-width="100"  :style="{background: '#fff'}">
@@ -13,19 +14,19 @@
                         <Submenu :name="item.name" v-for="(item,index) in menuList" :key="index">
                             <template slot="title">
                                 <Icon :type="item.icon || 'ios-navigate'"></Icon>
-                                {{item.meta.title}}
+                                {{item.title || item.meta.title}}
                             </template>
                             <template v-if="item.children && item.children.length">
                                 <template v-for="(cItem,cIndex) in item.children">
                                     <Submenu v-if="cItem.children && cItem.children.length" :name="cItem.name" class="margin-left-15" :key="'c'+cIndex">
                                         <template slot="title">
-                                            {{cItem.meta.title}}
+                                            {{cItem.title || cItem.meta.title}}
                                         </template>
                                         <template v-if="cItem.children && cItem.children.length">
-                                            <MenuItem :name="ccItem.name" v-for="(ccItem,ccIndex) in cItem.children" :key="'cc'+ccIndex"  @click.native="sideMenuClick(ccItem)">{{ccItem.meta.title}}</MenuItem>
+                                            <MenuItem :name="ccItem.name" v-for="(ccItem,ccIndex) in cItem.children" :key="'cc'+ccIndex"  @click.native="sideMenuClick(ccItem)">{{ccItem.title ||  ccItem.meta.title}}</MenuItem>
                                         </template>
                                     </Submenu>
-                                    <MenuItem v-else :name="cItem.name"  :key="'c'+cIndex" @click.native="sideMenuClick(cItem)">{{cItem.meta.title}}</MenuItem>
+                                    <MenuItem v-else :name="cItem.name"  :key="'c'+cIndex" @click.native="sideMenuClick(cItem)">{{cItem.title || cItem.meta.title}}</MenuItem>
                                 </template>
                             </template>
                         </Submenu>
@@ -47,13 +48,11 @@ export default {
   name: "Main",
   data() {
     return {
-    //   collapsed: false,
       activeMenuName:'pageOne',
     };
   },
   methods: {
     sideMenuClick(routerItem){
-        // debugger
         this.activeMenuName = routerItem.name
         this.$router.push({name:routerItem.name})
     }
@@ -61,6 +60,9 @@ export default {
   computed:{
     menuList(){
         return this.$store.state.user.menuList
+    },
+    userName(){
+        return localStorage.getItem('name') || ''
     }
   },
   mounted() {
@@ -69,7 +71,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang='less' scoped>
 .layout{
     border: 1px solid #d7dde4;
@@ -93,6 +94,16 @@ export default {
         left: 20px;
         color: #fff;
         font-size: 20px;
+    }
+    .header-user{
+        height: 30px;
+        line-height: 30px;
+        float: right;
+        position: relative;
+        top: 15px;
+        right: 10px;
+        color: #fff;
+        font-size: 15px;
     }
     .layout-footer-center{
         text-align: center;

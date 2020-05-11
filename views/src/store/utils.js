@@ -3,7 +3,7 @@ export default class CreatMenu {
   constructor(routerData=[],accessData=[]){
     this.router_data = routerData;    // 传入的完整路由对象
     this.access_data = accessData;    // 传入的权限依赖数组
-    this.access_map = this.routerArr2Map() //将accessData转成map形式
+    this.access_map = this.routerArr2Map() //将accessData由array转成map形式
   }
 
   routerArr2Map(){

@@ -7,7 +7,7 @@ var logger = require('morgan');
 var ejs = require('ejs');
 var userApi = require('./controller/user');
 
-var useMock = true  //是否使用mock数据
+var useMock = false  //是否使用mock数据
 
 
 var app = express();
