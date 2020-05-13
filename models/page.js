@@ -27,6 +27,11 @@ module.exports = {
                             reject('查询失败') 
                         }
                         if(_result){
+                            _result.forEach(item=>{
+                                if(item.actions){
+                                    item.actions = String(item.actions).split('#')
+                                }
+                            })
                             resolve(_result)
                         }
                     })

@@ -6,6 +6,8 @@ var bodyParser = require('body-parser');
 var logger = require('morgan');
 var ejs = require('ejs');
 var userApi = require('./controller/user');
+var systemApi = require('./controller/system');
+
 
 var useMock = false  //是否使用mock数据
 
@@ -53,6 +55,7 @@ app.all('*', (req, res, next) => {
 
 //接口处理
 app.use('/user', userApi);
+app.use('/system', systemApi);
 
 
 

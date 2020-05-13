@@ -1,0 +1,32 @@
+{
+    "code":0,
+    "msg":"",
+    "data":[
+        {
+            "id":1,
+            "info": "add",
+            "title": "添加"
+        },
+        {
+            "id":2,
+            "info": "delete",
+            "title": "删除"
+        },
+        {
+            "id":3,
+            "info": "modify",
+            "title": "添加"
+        },
+        {
+            "id":4,
+            "info": "upload",
+            "title": "上传"
+        },
+        {
+            "id":5,
+            "info": "download",
+            "title": "下载"
+        }
+    ],
+    "description":"所有操作类型列表"
+}
