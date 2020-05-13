@@ -7,11 +7,11 @@ const store = new Vuex.Store({
     modules:{
         user:user
     },
-    state: {
-
-    },
+    state: {},
     mutations: {},
-    actions: {}
+    actions: {
+
+    }
 })
 
 export default store

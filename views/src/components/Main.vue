@@ -3,7 +3,7 @@
          <Layout class="main width-100 height-100">
             <Header>
                 <div class="layout-logo">
-                    <Icon type="md-sunny" />
+                    <Icon type="md-planet" />
                     <span class="f-20">Node Demo</span>
                 </div>
                 <div class="header-user">Welcome {{userName}}~</div>

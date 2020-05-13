@@ -38,7 +38,7 @@ router.beforeEach((to, from, next) => {
       next({ path: '/login' })
       return
     }
-    store.dispatch('getMenuList').then(res => {
+    store.dispatch('getAccessInfo').then(res => {
       router.addRoutes(res)
       next({ path: to.redirectedFrom || to.path })
     })
