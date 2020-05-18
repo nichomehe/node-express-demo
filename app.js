@@ -8,9 +8,8 @@ var ejs = require('ejs');
 var userApi = require('./controller/user');
 var systemApi = require('./controller/system');
 
-
-var useMock = false  //是否使用mock数据
-
+var args = process.argv.splice(2)
+var useMock = args.includes('mock') //使用mock数据
 
 var app = express();
 

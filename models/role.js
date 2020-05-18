@@ -1,4 +1,4 @@
-let { getConnection } = require('./utils')
+let { getConnection ,selectByIds} = require('./utils')
 
 
 
@@ -7,7 +7,7 @@ module.exports = {
         return new Promise(async (resolve,reject)=>{
             //定义查询语句
             let _rolIds = roleIds.replace(/\#/g,',')
-            let sql = `SELECT * FROM roles where id in (${_rolIds}) `;
+            let sql = selectByIds('roles',_rolIds)
             let conn = await getConnection()
             conn.query(sql,function(error,result) {
                 if(error){

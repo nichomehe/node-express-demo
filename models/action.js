@@ -1,4 +1,4 @@
-let { getConnection } = require('./utils')
+let { getConnection,selectAll} = require('./utils')
 
 
 
@@ -6,7 +6,7 @@ module.exports = {
     getActionList :  () => {
         return new Promise(async (resolve,reject)=>{
             //定义查询语句
-            let sql = `SELECT * FROM actions`;
+            let sql = selectAll('actions')
             let conn = await getConnection()
             conn.query(sql,function(error,result) {
                 if(error){

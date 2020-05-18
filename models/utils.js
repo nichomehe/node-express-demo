@@ -1,6 +1,6 @@
 var pool = require('../db')
 
-let getConnection = function(){
+const getConnection = function(){
     return new Promise((resolve,reject)=>{
         pool.getConnection((err,conn) => {
             if(err){
@@ -12,7 +12,21 @@ let getConnection = function(){
     })
 }
 
+const selectAll = function(tableName){
+    return `SELECT * FROM ${tableName}`
+}
+
+const selectByIds = function(tableName,ids){
+    return `SELECT * FROM ${tableName} WHERE id IN (${ids})`
+}
+
+const selectByKey = function(tableName,key,value){
+    return `SELECT * FROM ${tableName} WHERE ${key}="${value}"`
+}
 
 module.exports = {
-    getConnection
+    getConnection,
+    selectAll,
+    selectByIds,
+    selectByKey
 }
