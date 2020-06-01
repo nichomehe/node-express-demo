@@ -1,14 +1,37 @@
-let { getConnection , selectByIds } = require('./utils')
+let { getConnection ,selectAll, selectByIds } = require('./utils')
 
 
 
 module.exports = {
-    getPages :  (pageIds) => {
+    getAllPages :  () => {
+        return new Promise((resolve,reject)=>{
+            //定义查询语句
+            let sql = selectAll('pages')
+            getConnection().then( _conn => {
+                let conn = _conn
+                conn.query(sql,function(error,result) {
+                    if(error){
+                        reject('查询失败') 
+                    }
+                    if (result) {
+                        result.forEach(item=>{
+                            if(item.actions){
+                                item.actions = item.actions.split('#')
+                            }
+                        })
+                        resolve(result)
+                    }
+                    conn.release()
+                })
+            })
+        })
+    },
+    getPagesByIds :  (pageIds) => {
         return new Promise((resolve,reject)=>{
             //定义查询语句
             let _pageIds = pageIds.join(',')
             let sql = selectByIds('pages',_pageIds)
-            getConnection().then(_conn=>{
+            getConnection().then( _conn =>{
                 let conn = _conn
                 conn.query(sql,function(error,result) {
                     if(error){
@@ -43,8 +66,6 @@ module.exports = {
             }).catch(err=>{
                 reject('查询失败')
             })
-
-
         })
 
     },

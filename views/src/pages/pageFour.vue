@@ -1,11 +1,11 @@
 <template>
   <div class="page-four">
     <h1>{{ msg }}</h1>
-    <button v-if="$route.meta.actions.add">Add</button>
-    <button v-if="$route.meta.actions.delete">Delete</button>
-    <button v-if="$route.meta.actions.modify">Modify</button>
-    <button v-if="$route.meta.actions.upload">Upload</button>
-    <button v-if="$route.meta.actions.download">Download</button>
+    <Button v-if="$route.meta.actions.add">Add</Button>
+    <Button v-if="$route.meta.actions.delete">Delete</Button>
+    <Button v-if="$route.meta.actions.modify">Modify</Button>
+    <Button v-if="$route.meta.actions.upload">Upload</Button>
+    <Button v-if="$route.meta.actions.download">Download</Button>
   </div>
 </template>
 
