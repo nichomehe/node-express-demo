@@ -13,6 +13,9 @@ class baseModel {
     selectByKey = function(key,value){
         return `SELECT * FROM ${this.table} WHERE ${key}="${value}"`
     }
+    add(){
+        return `INSERT INTO ${this.table} WHERE ${key}="${value}"`
+    }
     fillModel(){
         Object.keys(this.params).forEach(key=>{
             if(this.params[key] || this.params[key] == 0){

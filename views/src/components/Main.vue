@@ -43,12 +43,13 @@
         </Layout>
     </div>
 </template>
-<script>
+<script >
 export default {
   name: "Main",
   data() {
     return {
       activeMenuName:'pageOne',
+      openNames:[]
     };
   },
   methods: {
@@ -66,6 +67,10 @@ export default {
     }
   },
   mounted() {
+    this.activeName = this.$route.name
+    this.$route.matched.forEach(item => {
+      self.openNames.push(item.name)
+    })
       
   }
 };
