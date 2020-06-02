@@ -265,3 +265,19 @@
     transform: translate3d(-100%, 0, 0);
     position: absolute;
   }
+
+  .fix-table-btn {
+    margin:0 5px;  
+    &:focus {
+      box-shadow: none;
+    }
+    &:hover {
+      background-color: transparent;
+    }
+    &[disabled]{
+      background-color: transparent;
+      &:hover {
+        background-color: transparent;
+      }
+    }
+  }

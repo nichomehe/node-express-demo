@@ -1,3 +1,4 @@
+const RoleList = () => import(/* webpackChunkName: "pageOne" */ '@/pages/system/roleList.vue')
 const Main = () => import(/* webpackChunkName: "main" */ '@/components/Main.vue')
 const PageOne = () => import(/* webpackChunkName: "pageOne" */ '@/pages/pageOne.vue')
 const PageTwo = () => import(/* webpackChunkName: "pageTwo" */ '@/pages/pageTwo.vue')
@@ -8,6 +9,22 @@ const PageFour = () => import(/* webpackChunkName: "pageFour" */ '@/pages/pageFo
 
 
 export default [
+    {
+        path: '/system',
+        component: Main,
+        icon:'ios-build',
+        name:'systemBase',
+        meta: { title: '系统设置'},
+        children: [
+          {
+            path: 'roleList',
+            name: 'roleList',
+            icon:'ios-people',
+            component: RoleList,
+            meta:{title: '角色列表'}
+          }
+        ]
+    },
     {
         path: '/one',
         component: Main,

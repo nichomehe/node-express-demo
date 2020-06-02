@@ -6,11 +6,14 @@
                     <Icon type="md-planet" />
                     <span class="f-20">Node Demo</span>
                 </div>
-                <div class="header-user">Welcome {{userName}}~</div>
+                <div class="header-user">
+                    <span>Welcome {{userName}}~</span>
+                    <span class="color-theme f-12" @click="logout">退出登录</span>
+                </div>
             </Header>
             <Layout>
                 <Sider ref="side" breakpoint="md" hide-trigger collapsible :collapsed-width="100"  :style="{background: '#fff'}">
-                    <Menu :active-name="activeMenuName" theme="light" width="auto" accordion>
+                    <Menu :active-name="activeMenuName" :open-names="openNames" theme="light" width="auto" accordion>
                         <Submenu :name="item.name" v-for="(item,index) in menuList" :key="index">
                             <template slot="title">
                                 <Icon :type="item.icon || 'ios-navigate'"></Icon>
@@ -56,6 +59,11 @@ export default {
     sideMenuClick(routerItem){
         this.activeMenuName = routerItem.name
         this.$router.push({name:routerItem.name})
+    },
+    logout(){
+        localStorage.removeItem('name')
+        window.location.hash = '#/login'
+        window.reload()
     }
   },
   computed:{
@@ -66,12 +74,12 @@ export default {
         return localStorage.getItem('name') || ''
     }
   },
-  mounted() {
-    this.activeName = this.$route.name
+  created() {
+    let self = this
+    this.activeMenuName = this.$route.name
     this.$route.matched.forEach(item => {
       self.openNames.push(item.name)
     })
-      
   }
 };
 </script>
