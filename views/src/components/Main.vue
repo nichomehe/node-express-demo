@@ -104,7 +104,7 @@ export default {
         float: left;
         position: relative;
         top: 15px;
-        left: 20px;
+        left: 0px;
         color: #fff;
         font-size: 20px;
     }

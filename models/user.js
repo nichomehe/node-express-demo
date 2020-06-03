@@ -4,11 +4,11 @@ let PageModel = require('./page')
 
 module.exports = {
     login :  (request) => {
-        let {name,password} = request.body
+        let { name , password} = request.body
         return new Promise((resolve,reject)=>{
             //定义查询语句
             let sql = selectByKey('users','name',name)
-            getConnection().then(_conn=>{
+            getConnection().then( _conn =>{
                 let conn = _conn
                 conn.query(sql,function(error,result) {
                     if(error){

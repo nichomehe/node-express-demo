@@ -24,9 +24,23 @@ const selectByKey = function(tableName,key,value){
     return `SELECT * FROM ${tableName} WHERE ${key}="${value}"`
 }
 
+const updateById = function(tableName,params,id){
+    console.log('params======',params)
+    let paramsArr = []
+    let paramsStr = ''
+    Object.keys(params).forEach(key=>{
+        paramsArr.push(`${key}="${params[key]}"`)  
+    })
+    paramsStr = paramsArr.join(",")
+    let res = `UPDATE ${tableName} set ${paramsStr} WHERE id="${id}"`
+    console.log('update=====',res)
+    return `UPDATE ${tableName} set ${paramsStr} WHERE id="${id}"`
+}
+
 module.exports = {
     getConnection,
     selectAll,
     selectByIds,
-    selectByKey
+    selectByKey,
+    updateById
 }

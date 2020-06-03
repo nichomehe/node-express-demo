@@ -14,9 +14,9 @@
         <Modal
         v-model="showModal"
         title="修改角色页面权限"
-        on-visible-change="modalChange">
+        @on-ok="confirm">
         <div>
-            <Tree v-if="showModal" :data="treeList" show-checkbox></Tree>
+            <Tree v-if="showModal" :data="treeList" @on-check-change="treeCheckChange" show-checkbox></Tree>
         </div>
 
     </Modal>
@@ -30,6 +30,7 @@ export default {
     data () {
         return {
             showModal:false,
+            roleId: "",
             roleList:[],
             treeList:[],
             columns:[
@@ -44,9 +45,6 @@ export default {
         }
     },
     methods:{
-        modalChange(show){
-            
-        },
         getRoleList(){
             this.$fetch({
                 url:'http://127.0.0.1:3000/system/getRoleList',
@@ -55,15 +53,20 @@ export default {
                 this.roleList = res.data.data
             }))
         },
+        treeCheckChange(){
+            this.treeList = JSON.parse(JSON.stringify(this.treeList))
+        },
         modify(row){
             let checkPages =  row.pages.split('#') || []
             let list = []
             this.treeList.forEach(item => {
                 if(item.children && item.children.length){
-                    item.checked =false
+                    item.checked = false
+                    item.expand = false
                     item.children.forEach(cItem => {
                         if(checkPages.includes(String(cItem.id))){
                             cItem.checked = true
+                            item.expand = true
                         }else{
                             cItem.checked = false
                         }
@@ -71,8 +74,36 @@ export default {
                 }
                 list.push(item)
             })
+            this.roleId = row.id
             this.treeList = list
             this.showModal = true
+        },
+        filterCheckData(data,resultArr = []){
+            let self = this
+            let arr = resultArr
+            data.forEach(item => {
+                if(item.checked){
+                    arr.push(item.id)
+                }
+                if(item.children && item.children.length){
+                    arr = self.filterCheckData(item.children,arr)
+                }
+            })
+            return arr
+        },
+        confirm(){
+            let checkItems = this.filterCheckData(this.treeList)
+            this.$fetch({
+                url:'http://127.0.0.1:3000/system/setPagesByRole',
+                method:'post',
+                data:{
+                    pages:checkItems.join("#"),
+                    id:this.roleId
+                }
+            }).then(res=>{
+                this.$Message.success( res.data.msg || '登陆成功!')
+                window.location.reload()
+            })
         }
 
     },

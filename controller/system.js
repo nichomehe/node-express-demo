@@ -35,5 +35,16 @@ router.post('/getAllMenuList', (request, result) => {
   })
 });
 
+// 更改角色页面权限接口
+router.post('/setPagesByRole', (request, result) => { 
+  roleModel.setPagesByRole(request).then((res)=>{
+    jsonData(result,res)
+  }).catch((err)=>{
+    errorData(result,err)
+  })
+});
+
+
+
 
 module.exports = router;
