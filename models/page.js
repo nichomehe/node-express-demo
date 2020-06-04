@@ -14,12 +14,10 @@ module.exports = {
                         reject('查询失败') 
                     }
                     if (result) {
-                        let pages = []
                         result.forEach(item=>{
                             if(item.actions){
                                 item.actions = item.actions.split('#')
                             }
-                            pages.push(item)
                         })
                         resolve(result)
                     }
@@ -28,7 +26,7 @@ module.exports = {
             })
         })
     },
-    getPages :  (pageIds) => {
+    getPagesByIds :  (pageIds) => {
         return new Promise((resolve,reject)=>{
             //定义查询语句
             let _pageIds = pageIds.join(',')

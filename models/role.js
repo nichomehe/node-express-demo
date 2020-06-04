@@ -1,4 +1,4 @@
-let { getConnection , selectAll , selectByIds, updateById} = require('./utils')
+let { getConnection , selectAll , selectByIds, updateById , insert} = require('./utils')
 
 
 
@@ -43,21 +43,46 @@ module.exports = {
 
     },
 
-    setPagesByRole : (request) => {
-        let { pages , id } = request.body
+    setRole : (request) => {
+        let { id , name , pages } = request.body
         return new Promise((resolve,reject)=>{
             let params = {
+                name:name,
                 pages:pages
             }
             getConnection().then( _conn => {
                 let conn = _conn
                 let sql = updateById('roles',params,+id)
+                console.log('sql====',sql)
                 conn.query(sql,function(error,result) {
                     if(error){
                         reject('修改失败') 
                     }
                     if (result) {
                         resolve('修改成功')
+                    }
+                    conn.release()
+                })
+            } )
+        })
+    },
+
+    addRole : (request) => {
+        let { name , pages } = request.body
+        return new Promise((resolve,reject)=>{
+            let params = {
+                name:name,
+                pages:pages
+            }
+            getConnection().then( _conn => {
+                let conn = _conn
+                let sql = insert('roles',params)
+                conn.query(sql,function(error,result) {
+                    if(error){
+                        reject('添加失败') 
+                    }
+                    if (result) {
+                        resolve('添加成功')
                     }
                     conn.release()
                 })

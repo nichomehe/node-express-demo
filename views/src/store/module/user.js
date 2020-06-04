@@ -7,7 +7,7 @@ export default {
         userInfo:null, //用户信息
         menuList:null, //渲染左边侧栏
         allMenuList:null,
-        actionMap:null
+        actionMap:null,
       },
       mutations: {
         setMenuList (state, list) {
@@ -47,7 +47,7 @@ export default {
         getMenuList(){
           return new Promise((resolve,reject)=>{
             axios({
-              url: 'http://127.0.0.1:3000/user/getMenuList',
+              url: 'http://127.0.0.1:3000/system/getMenuList',
               method: 'POST',
               data:{
                 uid:localStorage.getItem('uid')

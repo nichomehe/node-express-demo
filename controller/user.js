@@ -21,13 +21,24 @@ router.post('/getUserList', (request, result) => {
   })
 });
 
-//获取左侧菜单栏
-router.post('/getMenuList', (request, result) => { 
-  userModel.getMenuList(request).then((res)=>{
+// 修改用户信息接口
+router.post('/setUser', (request, result) => { 
+  userModel.setUser(request).then((res)=>{
     jsonData(result,res)
   }).catch((err)=>{
     errorData(result,err)
   })
 });
 
-module.exports = router;
+// 添加用户接口
+router.post('/addUser', (request, result) => { 
+  userModel.addUser(request).then((res)=>{
+    jsonData(result,res)
+  }).catch((err)=>{
+    errorData(result,err)
+  })
+});
+
+
+
+module.exports = router

@@ -1,4 +1,4 @@
-let { getConnection , selectAll , selectByKey} = require('./utils')
+let { getConnection , selectAll , selectByKey , updateById , insert} = require('./utils')
 let RoleModel = require('./role')
 let PageModel = require('./page')
 
@@ -32,7 +32,6 @@ module.exports = {
                 reject('查询失败')
             })
         })
-
     },
     getUsers :  () => {
         return new Promise((resolve,reject)=>{
@@ -55,6 +54,54 @@ module.exports = {
         })
 
     },
+    setUser : (request) => {
+        let { id , name , password , role } = request.body
+        return new Promise((resolve,reject)=>{
+            let params = {
+                name:name,
+                password:password,
+                role:role
+            }
+            getConnection().then( _conn => {
+                let conn = _conn
+                let sql = updateById('users',params,+id)
+                conn.query(sql,function(error,result) {
+                    if(error){
+                        reject('修改失败') 
+                    }
+                    if (result) {
+                        resolve('修改成功')
+                    }
+                    conn.release()
+                })
+            } )
+        })
+    },
+
+    addUser : (request) => {
+        let { name , password , role } = request.body
+        return new Promise((resolve,reject)=>{
+            let params = {
+                name:name,
+                password:password,
+                role:role
+            }
+            getConnection().then( _conn => {
+                let conn = _conn
+                let sql = insert('users',params)
+                conn.query(sql,function(error,result) {
+                    if(error){
+                        reject('添加失败') 
+                    }
+                    if (result) {
+                        resolve('添加成功')
+                    }
+                    conn.release()
+                })
+            } )
+        })
+    },
+
     getMenuList: (request) => {
         return new Promise((resolve,reject)=>{
             let { uid } = request.body
@@ -80,7 +127,7 @@ module.exports = {
                                         })
                                     }
                                 })
-                                PageModel.getPages(pageIds).then(res=>{ // 3.从page表中取出page
+                                PageModel.getPagesByIds(pageIds).then(res=>{ // 3.从page表中取出page
                                     resolve(res)
                                 }).catch(err=>{
                                     reject(err)
@@ -100,5 +147,6 @@ module.exports = {
                 reject('查询失败')
             })
         })
-    }
+    },
+
 }

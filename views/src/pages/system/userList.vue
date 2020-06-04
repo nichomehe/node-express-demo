@@ -3,28 +3,38 @@
     <div class="text-left margin-bottom-40">
         <Breadcrumb>
             <BreadcrumbItem>系统设置</BreadcrumbItem>
-            <BreadcrumbItem>角色列表</BreadcrumbItem>
+            <BreadcrumbItem>用户列表</BreadcrumbItem>
         </Breadcrumb>
     </div>
     <div class="margin-bottom-30 text-left">
-        <Button type="primary" @click="add">添加角色</Button>
+        <Button type="primary" @click="add">添加用户</Button>
     </div>
-    <Table ref="table" width="550" border :columns="columns" :data="roleList">
+    <Table ref="table" width="550" border :columns="columns" :data="userList">
         <template slot-scope="props" slot="action">
             <Button @click.native="modify(props.rowInfo)" type="text" class="fix-table-btn pointer" target="_blank" icon="ios-create-outline" size="small">修改</Button>
         </template>
     </Table>
     <Modal
         v-model="showModal"
-        :title="roleId?'修改角色':'添加角色'"
+        :title="userId?'修改用户信息':'添加用户'"
         @on-ok="confirm"
         @on-visible-change="modalStatusChange">
-        <Form :model="formData" label-position="left" :label-width="100">
-            <FormItem label="角色名：" required>
+        <Form :model="formData" label-position="left" :label-width="60">
+            <FormItem label="姓名：" required>
                 <Input v-model="formData.name"></Input>
             </FormItem>
-            <FormItem label="页面权限：" required>
-                <Tree v-if="showModal" :data="treeList" @on-check-change="treeCheckChange" show-checkbox></Tree>
+            <FormItem label="密码：" required>
+                <Input v-model="formData.password" type="password"></Input>
+            </FormItem>
+            <FormItem label="角色：" required>
+                  <Select multiple  clearable transfer v-model="formData.role" placeholder="请选择用户角色">
+                    <Option
+                      :key="index"
+                      :value="String(option.id)"
+                      v-for="(option, index) in roleList">
+                      {{option.name}}
+                    </Option>
+                  </Select>
             </FormItem>
         </Form>
 
@@ -35,19 +45,22 @@
 
 <script>
 export default {
-  name: 'roleList',
+  name: 'userList',
     data () {
         return {
             showModal:false,
-            roleId: "",
+            userId: "",
             formData:{
-                name:""
+                name:"",
+                password:"",
+                role:""
             },
+            userList:[],
             roleList:[],
-            treeList:[],
             columns:[
                 { title: 'id', align: 'center', key: 'id',  minWidth: 110 },
-                { title: '角色名称', align: 'center', key: 'name',  minWidth: 110 },
+                { title: '姓名', align: 'center', key: 'name',  minWidth: 110 },
+                { title: '角色', align: 'center', key: 'role',  minWidth: 110 },
                 { title: '操作', align: 'center', key: 'action',  minWidth: 110 ,
                     render: (h, params) => {
                         return h('div', this.$refs.table['$scopedSlots'].action({ rowInfo: params.row}))
@@ -60,11 +73,23 @@ export default {
         modalStatusChange(show){
             let self = this
             if(!show){
-                this.roleId = ""
+                this.userId = ""
                 for(let key in self.formData){
                     self.formData[key] = ""
                 }
+            }else{
+                if(!this.roleList.length){
+                    this.getRoleList()
+                }
             }
+        },
+        getUserList(){
+            this.$fetch({
+                url:'http://127.0.0.1:3000/user/getUserList',
+                method:'post'
+            }).then((res=>{
+                this.userList = res.data.data
+            }))
         },
         getRoleList(){
             this.$fetch({
@@ -74,64 +99,30 @@ export default {
                 this.roleList = res.data.data
             }))
         },
-        treeCheckChange(){
-            this.treeList = JSON.parse(JSON.stringify(this.treeList))
-        },
         add(){
-            this.treeList = JSON.parse(JSON.stringify(this.$store.state.user.allMenuList))
             this.showModal = true
         },
         modify(row){
-            let checkPages =  row.pages.split('#') || []
-            let list = []
-            this.treeList.forEach(item => {
-                if(item.children && item.children.length){
-                    item.checked = false
-                    item.expand = false
-                    item.children.forEach(cItem => {
-                        if(checkPages.includes(String(cItem.id))){
-                            cItem.checked = true
-                            item.expand = true
-                        }else{
-                            cItem.checked = false
-                        }
-                    })
-                }
-                list.push(item)
+            let self = this
+            this.userId = row.id
+            Object.keys(this.formData).forEach(key=>{
+                row[key] && (self.formData[key] = row[key])
             })
-            this.roleId = row.id
-            this.formData.name = row.name
-            this.treeList = list
+            this.formData.role = row.role.split("#")
             this.showModal = true
         },
-        filterCheckData(data,resultArr = []){
-            let self = this
-            let arr = resultArr
-            data.forEach(item => {
-                if(item.checked){
-                    arr.push(item.id)
-                }
-                if(item.children && item.children.length){
-                    arr = self.filterCheckData(item.children,arr)
-                }
-            })
-            return arr
-        },
         confirm(){
-            let checkItems = this.filterCheckData(this.treeList)
-            let pagesStr = checkItems.join("#")
-            let params = {
-                pages:pagesStr,
-            }
-            if(this.roleId){
-                params.id = this.roleId
+            let params = {}
+            if(this.userId){
+                params.id = this.userId
             }
             Object.assign(params,this.formData)
-            this.roleId?this.modifyConfirm(params):this.addConfirm(params)
+            params.role = this.formData.role.join("#")
+            this.userId?this.modifyConfirm(params):this.addConfirm(params)
         },
         modifyConfirm(data){
             this.$fetch({
-                url:'http://127.0.0.1:3000/system/setRole',
+                url:'http://127.0.0.1:3000/user/setUser',
                 method:'post',
                 data: data
             }).then(res=>{
@@ -141,7 +132,7 @@ export default {
         },
         addConfirm(data){
             this.$fetch({
-                url:'http://127.0.0.1:3000/system/addRole',
+                url:'http://127.0.0.1:3000/user/addUser',
                 method:'post',
                 data: data
             }).then(res=>{
@@ -151,11 +142,9 @@ export default {
         }
 
     },
-
-  mounted(){
-      this.treeList = JSON.parse(JSON.stringify(this.$store.state.user.allMenuList))
-      this.getRoleList()
-  }
+    mounted(){
+        this.getUserList()
+    }
 
 }
 </script>

@@ -1,4 +1,6 @@
-const RoleList = () => import(/* webpackChunkName: "pageOne" */ '@/pages/system/roleList.vue')
+const RoleList = () => import(/* webpackChunkName: "roleList" */ '@/pages/system/roleList.vue')
+const UserList = () => import(/* webpackChunkName: "userList" */ '@/pages/system/userList.vue')
+const PageList = () => import(/* webpackChunkName: "pageList" */ '@/pages/system/pageList.vue')
 const Main = () => import(/* webpackChunkName: "main" */ '@/components/Main.vue')
 const PageOne = () => import(/* webpackChunkName: "pageOne" */ '@/pages/pageOne.vue')
 const PageTwo = () => import(/* webpackChunkName: "pageTwo" */ '@/pages/pageTwo.vue')
@@ -17,11 +19,25 @@ export default [
         meta: { title: '系统设置'},
         children: [
           {
+            path: 'userList',
+            name: 'userList',
+            icon:'ios-people',
+            component: UserList,
+            meta:{title: '用户列表'}
+          },
+          {
             path: 'roleList',
             name: 'roleList',
             icon:'ios-people',
             component: RoleList,
             meta:{title: '角色列表'}
+          },
+          {
+            path: 'pageList',
+            name: 'pageList',
+            icon:'ios-book',
+            component: PageList,
+            meta:{title: '页面列表'}
           }
         ]
     },
