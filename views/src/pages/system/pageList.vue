@@ -21,10 +21,10 @@
     </Table>
     <Modal
         v-model="showModal"
-        :title="userId?'修改页面信息':'添加页面'"
+        :title="pageId?'修改页面信息':'添加页面'"
         @on-ok="confirm"
         @on-visible-change="modalStatusChange">
-        <Form :model="formData" label-position="left" :label-width="100">
+        <Form :model="formData" label-position="right" :label-width="100">
             <FormItem label="侧栏title：" required>
                 <Input v-model="formData.title"></Input>
             </FormItem>
@@ -57,7 +57,7 @@ export default {
     data () {
         return {
             showModal:false,
-            userId: "",
+            pageId: "",
             actionMap:{},
             formData:{
                 title:"",
@@ -89,7 +89,7 @@ export default {
         modalStatusChange(show){
             let self = this
             if(!show){
-                this.userId = ""
+                this.pageId = ""
                 for(let key in self.formData){
                     self.formData[key] = ""
                 }
@@ -110,7 +110,7 @@ export default {
         },
         modify(row){
             let self = this
-            this.userId = row.id
+            this.pageId = row.id
             Object.keys(this.formData).forEach(key=>{
                 row[key] && (self.formData[key] = row[key])
             })
@@ -118,16 +118,16 @@ export default {
         },
         confirm(){
             let params = {}
-            if(this.userId){
-                params.id = this.userId
+            if(this.pageId){
+                params.id = this.pageId
             }
             Object.assign(params,this.formData)
-            params.role = this.formData.role.join("#")
-            this.userId?this.modifyConfirm(params):this.addConfirm(params)
+            params.actions = this.formData.actions.join("#")
+            this.pageId?this.modifyConfirm(params):this.addConfirm(params)
         },
         modifyConfirm(data){
             this.$fetch({
-                url:'http://127.0.0.1:3000/user/setUser',
+                url:'http://127.0.0.1:3000/system/setPage',
                 method:'post',
                 data: data
             }).then(res=>{

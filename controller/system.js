@@ -71,6 +71,15 @@ router.post('/addRole', (request, result) => {
   })
 });
 
+// 更改页面接口
+router.post('/setPage', (request, result) => { 
+  pageModel.setPage(request).then((res)=>{
+    jsonData(result,res)
+  }).catch((err)=>{
+    errorData(result,err)
+  })
+});
+
 
 
 

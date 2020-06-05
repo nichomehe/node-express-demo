@@ -1,4 +1,4 @@
-let { getConnection ,selectAll, selectByIds } = require('./utils')
+let { getConnection ,selectAll, selectByIds , updateById } = require('./utils')
 
 
 
@@ -69,5 +69,31 @@ module.exports = {
         })
 
     },
+
+    setPage: (request) => {
+        let { id , title , name , icon , actions } = request.body
+        return new Promise((resolve,reject)=>{
+            let params = {
+                title:title,
+                name:name,
+                icon:icon,
+                actions:actions
+            }
+            getConnection().then( _conn => {
+                let conn = _conn
+                let sql = updateById('pages',params,+id)
+                console.log('sql====',sql)
+                conn.query(sql,function(error,result) {
+                    if(error){
+                        reject('修改失败') 
+                    }
+                    if (result) {
+                        resolve('修改成功')
+                    }
+                    conn.release()
+                })
+            } )
+        })
+    }
 
 }
