@@ -7,7 +7,7 @@
         </Breadcrumb>
     </div>
     <!-- <div class="margin-bottom-30 text-left">
-        <Button type="primary" @click="add">添加用户</Button>
+        <Button type="primary" @click="add">添加页面</Button>
     </div> -->
     <Table ref="table"  border :columns="columns" :data="pageList">
         <template slot-scope="props" slot="action">
@@ -91,10 +91,8 @@ export default {
             if(!show){
                 this.pageId = ""
                 for(let key in self.formData){
-                    self.formData[key] = ""
+                    typeof self.formData[key] == "String" ? (self.formData[key] = "") : (self.formData[key] instanceof Array ? (self.formData[key] = []) : (self.formData[key] = {}) )                   
                 }
-            }else{
-                
             }
         },
         getPageList(){
@@ -137,7 +135,7 @@ export default {
         },
         addConfirm(data){
             this.$fetch({
-                url:'http://127.0.0.1:3000/user/addUser',
+                url:'http://127.0.0.1:3000/system/addPage',
                 method:'post',
                 data: data
             }).then(res=>{
