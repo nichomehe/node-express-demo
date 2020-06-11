@@ -3,7 +3,7 @@ let { getConnection , selectAll , selectByIds, updateById , insert} = require('.
 
 
 module.exports = {
-    getRoleList :  () => {
+    getRoleList :  (request) => {
         return new Promise((resolve,reject)=>{
             //定义查询语句
             let sql = selectAll('roles')

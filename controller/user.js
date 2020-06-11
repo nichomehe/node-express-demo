@@ -1,11 +1,11 @@
 let express = require('express')
 let router = express.Router();
-let userModel = require('../models/user')
+let userDao = require('../dao/userDao')
 let { jsonData, errorData} = require('./utils')
 
 // 用户登陆接口
 router.post('/login', (request, result) => { 
-  userModel.login(request).then((res)=>{
+  userDao.login(request).then((res)=>{
     jsonData(result,res)
   }).catch((err)=>{
     errorData(result,err)
@@ -14,7 +14,7 @@ router.post('/login', (request, result) => {
 
 // 查询用户接口
 router.post('/getUserList', (request, result) => { 
-  userModel.getUsers().then((res)=>{
+  userDao.getUsers(request).then((res)=>{
     jsonData(result,res)
   }).catch((err)=>{
     errorData(result,err)
@@ -23,7 +23,7 @@ router.post('/getUserList', (request, result) => {
 
 // 修改用户信息接口
 router.post('/setUser', (request, result) => { 
-  userModel.setUser(request).then((res)=>{
+  userDao.setUser(request).then((res)=>{
     jsonData(result,res)
   }).catch((err)=>{
     errorData(result,err)
@@ -32,7 +32,7 @@ router.post('/setUser', (request, result) => {
 
 // 添加用户接口
 router.post('/addUser', (request, result) => { 
-  userModel.addUser(request).then((res)=>{
+  userDao.addUser(request).then((res)=>{
     jsonData(result,res)
   }).catch((err)=>{
     errorData(result,err)

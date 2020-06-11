@@ -1,9 +1,9 @@
 let { getConnection ,selectAll, selectByIds , updateById } = require('./utils')
 
-
+// controller(路由)  => dao(操作数据库) => model(数据库模型、一张表对应一个类)
 
 module.exports = {
-    getAllPages :  () => {
+    getAllPages :  (request) => {
         return new Promise((resolve,reject)=>{
             //定义查询语句
             let sql = selectAll('pages')

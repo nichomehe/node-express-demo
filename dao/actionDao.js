@@ -3,7 +3,7 @@ let { getConnection,selectAll} = require('./utils')
 
 
 module.exports = {
-    getActionList :  () => {
+    getActionList :  (request) => {
         return new Promise((resolve,reject)=>{
             //定义查询语句
             let sql = selectAll('actions')
