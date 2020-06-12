@@ -53,7 +53,6 @@ module.exports = {
             getConnection().then( _conn => {
                 let conn = _conn
                 let sql = updateById('roles',params,+id)
-                console.log('sql====',sql)
                 conn.query(sql,function(error,result) {
                     if(error){
                         reject('修改失败') 

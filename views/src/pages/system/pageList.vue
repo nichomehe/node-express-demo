@@ -32,7 +32,7 @@
                 <Input v-model="formData.name"></Input>
             </FormItem>
             <FormItem label="icon：" required>
-                <Input v-model="formData.icon" type="password"></Input>
+                <Input v-model="formData.icon" :icon="formData.icon"></Input>
             </FormItem>
             <FormItem label="操作权限：" required>
                   <Select multiple  clearable transfer v-model="formData.actions" placeholder="请选择页面操作权限">
@@ -91,7 +91,7 @@ export default {
             if(!show){
                 this.pageId = ""
                 for(let key in self.formData){
-                    typeof self.formData[key] == "String" ? (self.formData[key] = "") : (self.formData[key] instanceof Array ? (self.formData[key] = []) : (self.formData[key] = {}) )                   
+                    typeof self.formData[key] == "string" ? (self.formData[key] = "") : (self.formData[key] instanceof Array ? (self.formData[key] = []) : (self.formData[key] = {}) )                   
                 }
             }
         },

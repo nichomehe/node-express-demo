@@ -4,13 +4,13 @@ module.exports =  class BaseModel {
         this.model = {}, //该表的所有字段
         this.params = {} //传入参数
     }
-    selectAll = function(){
+    selectAll (){
         return `SELECT * FROM ${this.table}`
     }
-    selectByIds = function(ids){
+    selectByIds (ids){
         return `SELECT * FROM ${this.table} WHERE id IN (${ids})`
     }
-    selectByKeys = function(){
+    selectByKeys (){
         let selectData = this.fillModel()
         keys = Object.keys(selectData)
         let values = []
