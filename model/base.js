@@ -8,17 +8,17 @@ module.exports =  class BaseModel {
         if(!this.params.id) return 
         return `SELECT * FROM ${this.table} WHERE id=${+this.params.id}"`
     }
-    selectByKey = function(key){
+    selectByKey (key){
         if(!(this.model.hasOwnProperty(key))) return
         return `SELECT * FROM ${tableName} WHERE ${key}="${value}"`
     }
-    selectAll = function(){
+    selectAll (){
         return `SELECT * FROM ${this.table}`
     }
-    selectByIds = function(ids){
+    selectByIds (ids){
         return `SELECT * FROM ${this.table} WHERE id IN (${ids})`
     }
-    selectByKeys = function(){
+    selectByKeys (){
         let selectData = this.fillModel()
         keys = Object.keys(selectData)
         let values = keys.reduce((a,b)=>{
@@ -29,7 +29,7 @@ module.exports =  class BaseModel {
         },[])
         return `SELECT * FROM ${this.table} WHERE ${values.join("and")}"`
     }
-    update = function(){
+    update (){
         if(!this.params.id) return
         let updateData = this.fillModel()
         let paramsArr = Object.keys(updateData).reduce((a,b)=>{
