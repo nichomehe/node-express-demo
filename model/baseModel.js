@@ -3,14 +3,15 @@ module.exports =  class BaseModel {
         this.table = '', //数据库表名
         this.model = {}, //该表的所有字段
         this.params = {} //传入参数
+        this.fillModel()
     }
     selectById(){
         if(!this.params.id) return 
-        return `SELECT * FROM ${this.table} WHERE id=${+this.params.id}"`
+        return `SELECT * FROM ${this.table} WHERE id=${+this.params.id}`
     }
     selectByKey (key){
         if(!(this.model.hasOwnProperty(key))) return
-        return `SELECT * FROM ${tableName} WHERE ${key}="${value}"`
+        return `SELECT * FROM ${tableName} WHERE ${key}="${this.model[key]}"`
     }
     selectAll (){
         return `SELECT * FROM ${this.table}`
@@ -20,33 +21,34 @@ module.exports =  class BaseModel {
     }
     selectByKeys (){
         let selectData = this.fillModel()
-        keys = Object.keys(selectData)
+        let keys = Object.keys(selectData)
         let values = keys.reduce((a,b)=>{
             if(selectData[b] || selectData[b] === 0){
-                let str = `${b}=${selectData[b]}`
+                let str = typeof selectData[b] == 'string' ? `${b}='${selectData[b]}'` :`${b}=${selectData[b]}`
                 a.push(str)
             }
+            return a
         },[])
-        return `SELECT * FROM ${this.table} WHERE ${values.join("and")}"`
+        return `SELECT * FROM ${this.table} WHERE ${values.join(" and ")}`
     }
     update (){
         if(!this.params.id) return
         let updateData = this.fillModel()
         let paramsArr = Object.keys(updateData).reduce((a,b)=>{
             if(b != 'id'){
-                let item = `${b}="${updateData[b]}"`
+                let item = typeof updateData[b] == 'string' ? `${b}="${updateData[b]}"` : `${b}=${updateData[b]}`
                 a.push(item) 
             }
             return a 
         },[])
-        return `UPDATE ${this.table} set ${paramsArr.join(",")} WHERE id="${this.params.id}"`
+        return `UPDATE ${this.table} set ${paramsArr.join(",")} WHERE id=${this.params.id}`
     }
 
     add(){
         let addData = this.fillModel()
-        keys = Object.keys(addData)
+        let keys = Object.keys(addData)
         let values =  keys.map(key=>{
-            let str = key == 'id' ? 0 : addData[key]
+            let str = key == 'id' ? 0 : `"${addData[key]}"`
             return str
         })
         return `INSERT INTO ${this.table}  (${keys.join(",")}) VALUES (${values.join(",")})`

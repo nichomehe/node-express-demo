@@ -1,14 +1,14 @@
-let { getConnection ,selectAll, selectByIds , updateById } = require('./utils')
-
+let { getConnection } = require('./utils')
+let PageModel = require('../model/pageModel')
 // controller(路由)  => dao(操作数据库) => model(数据库模型、一张表对应一个类)
 
 module.exports = {
     getAllPages :  (request) => {
         return new Promise((resolve,reject)=>{
-            //定义查询语句
-            let sql = selectAll('pages')
             getConnection().then( _conn => {
                 let conn = _conn
+                let pageModel = new PageModel()
+                let sql = pageModel.selectAll()
                 conn.query(sql,function(error,result) {
                     if(error){
                         reject('查询失败') 
@@ -27,12 +27,12 @@ module.exports = {
         })
     },
     getPagesByIds :  (pageIds) => {
-        return new Promise((resolve,reject)=>{
-            //定义查询语句
-            let _pageIds = pageIds.join(',')
-            let sql = selectByIds('pages',_pageIds)
+        return new Promise((resolve,reject)=>{       
             getConnection().then( _conn =>{
                 let conn = _conn
+                let _pageIds = pageIds.join(',')
+                let pageModel = new PageModel()
+                let sql = pageModel.selectByIds(_pageIds)
                 conn.query(sql,function(error,result) {
                     if(error){
                         reject('查询失败') 
@@ -45,7 +45,7 @@ module.exports = {
                                 _pageIds=_pageIds+`,${item.parent_id}`
                             }
                         })
-                        let _sql = selectByIds('pages',_pageIds)
+                        let _sql = pageModel.selectByIds(_pageIds)
                         conn.query(_sql,function(_error,_result) {
                             if(_error){
                                 reject('查询失败') 
@@ -74,6 +74,7 @@ module.exports = {
         let { id , title , name , icon , actions } = request.body
         return new Promise((resolve,reject)=>{
             let params = {
+                id:id,
                 title:title,
                 name:name,
                 icon:icon,
@@ -81,7 +82,9 @@ module.exports = {
             }
             getConnection().then( _conn => {
                 let conn = _conn
-                let sql = updateById('pages',params,+id)
+                let pageModel = new PageModel(params)
+                let sql = pageModel.update()
+                console.log('sql====',sql)
                 conn.query(sql,function(error,result) {
                     if(error){
                         reject('修改失败') 
@@ -106,7 +109,8 @@ module.exports = {
             }
             getConnection().then( _conn => {
                 let conn = _conn
-                let sql = updateById('pages',params,+id)
+                let pageModel = new PageModel(params)
+                let sql = pageModel.add()
                 conn.query(sql,function(error,result) {
                     if(error){
                         reject('修改失败') 

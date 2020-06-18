@@ -1,61 +1,39 @@
-let { getConnection , selectAll , selectByKey , updateById , insert} = require('./utils')
-let RoleModel = require('./roleDao')
-let PageModel = require('./pageDao')
-
-let BaseModel = require('./base')
-
-
-class UserModel extends BaseModel {
-    constructor(data={}){
-        super()
-        this.table = 'users', //数据库表名
-        this.model = {        //该表的所有字段
-            id:"",
-            name:"",
-            role:"",
-            password:""
-        },
-        this.params = data //传入参数
-    }
-}
+let { getConnection } = require('./utils')
+let RoleDao = require('./roleDao')
+let PageDao = require('./pageDao')
+let UserModel = require('../model/userModel')
 
 module.exports = {
     login :  (request) => {
         return new Promise((resolve,reject)=>{
-            let { name , password} = request.body
-            //定义查询语句
-            let sql = selectByKey('users','name',name)
             getConnection().then( _conn =>{
                 let conn = _conn
+                let userModel = new UserModel(request.body)
+                let sql = userModel.selectByKeys()
                 conn.query(sql,function(error,result) {
                     if(error){
                         reject('查询失败') 
                     }
                     if (result) {
                         if(result.length){
-                            if(result[0].password == password){
-                                resolve(result)
-                            }else{
-                                reject('密码错误') 
-                            }
+                            resolve(result)
                         }else{
-                            reject('无此用户') 
-                        }
-                        
+                            reject('用户名或密码错误') 
+                        }  
                     }
                     conn.release()
                 })
             }).catch(err=>{
-                reject('查询失败')
+                reject('数据库连接失败')
             })
         })
     },
     getUsers :  (request) => {
         return new Promise((resolve,reject)=>{
-            //定义查询语句
-            let sql = selectAll('users')
             getConnection().then(_conn=>{
                 let conn = _conn
+                let userModel = new UserModel(request.body)
+                let sql = userModel.selectAll()
                 conn.query(sql,function(error,result) {
                     if(error){
                         reject('查询失败') 
@@ -75,13 +53,15 @@ module.exports = {
         let { id , name , password , role } = request.body
         return new Promise((resolve,reject)=>{
             let params = {
+                id:id,
                 name:name,
                 password:password,
                 role:role
             }
             getConnection().then( _conn => {
                 let conn = _conn
-                let sql = updateById('users',params,+id)
+                let userModel = new UserModel(params)
+                let sql = userModel.update()
                 conn.query(sql,function(error,result) {
                     if(error){
                         reject('修改失败') 
@@ -105,7 +85,8 @@ module.exports = {
             }
             getConnection().then( _conn => {
                 let conn = _conn
-                let sql = insert('users',params)
+                let userModel = new UserModel(params)
+                let sql = userModel.add()
                 conn.query(sql,function(error,result) {
                     if(error){
                         reject('添加失败') 
@@ -122,16 +103,17 @@ module.exports = {
     getMenuList: (request) => {
         return new Promise((resolve,reject)=>{
             let { uid } = request.body
-            let sql = selectByKey('users','id',uid)
             getConnection().then(_conn=>{
                 let conn = _conn
+                let userModel = new UserModel({ id:uid })
+                let sql = userModel.selectById()
                 conn.query(sql,function(error,result) { //  1.从user表中取到角色role 
                     if(error){
                         reject('查询失败') 
                     }
                     if (result) {
                         if(result.length){
-                            RoleModel.getRoles(result[0].role).then(res=>{ // 2.从角色表中取出pageIds
+                            RoleDao.getRoles(result[0].role).then(res=>{ // 2.从角色表中取出pageIds
                                 let roles = res
                                 let pageIds = []
                                 roles.forEach(item=>{
@@ -144,7 +126,7 @@ module.exports = {
                                         })
                                     }
                                 })
-                                PageModel.getPagesByIds(pageIds).then(res=>{ // 3.从page表中取出page
+                                PageDao.getPagesByIds(pageIds).then(res=>{ // 3.从page表中取出page
                                     resolve(res)
                                 }).catch(err=>{
                                     reject(err)
