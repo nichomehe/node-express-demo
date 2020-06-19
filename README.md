@@ -1,15 +1,21 @@
-
-```
 node-express-demo
 ├─ .DS_Store
+├─ README.md
 ├─ app.js
-├─ bin
+├─ bin                          //node入口文件
 │  └─ www
-├─ controller
+├─ controller                   //接口路由
 │  ├─ system.js
 │  ├─ user.js
 │  └─ utils.js
-├─ db.js
+├─ dao                          //连接数据库，操作数据库，处理业务逻辑
+│  ├─ actionDao.js
+│  ├─ base.js
+│  ├─ pageDao.js
+│  ├─ roleDao.js
+│  ├─ userDao.js
+│  └─ utils.js
+├─ db.js                        //连接数据库配置
 ├─ mockdata
 │  ├─ system
 │  │  └─ getActionList.json
@@ -17,16 +23,15 @@ node-express-demo
 │     ├─ getMenuList.json
 │     ├─ getUserList.json
 │     └─ login.json
-├─ models
-│  ├─ action.js
-│  ├─ base.js
-│  ├─ page.js
-│  ├─ role.js
-│  ├─ user.js
-│  └─ utils.js
+├─ model                        //数据库实体模型 生成sql语句
+│  ├─ actionModel.js
+│  ├─ baseModel.js
+│  ├─ pageModel.js
+│  ├─ roleModel.js
+│  └─ userModel.js
 ├─ package-lock.json
 ├─ package.json
-└─ views
+└─ views                        //前端页面
    ├─ .DS_Store
    ├─ .babelrc
    ├─ .editorconfig
@@ -85,7 +90,11 @@ node-express-demo
    │  │  ├─ pageFour.vue
    │  │  ├─ pageOne.vue
    │  │  ├─ pageThr.vue
-   │  │  └─ pageTwo.vue
+   │  │  ├─ pageTwo.vue
+   │  │  └─ system
+   │  │     ├─ pageList.vue
+   │  │     ├─ roleList.vue
+   │  │     └─ userList.vue
    │  ├─ router
    │  │  ├─ index.js
    │  │  └─ router.js

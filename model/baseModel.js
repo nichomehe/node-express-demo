@@ -1,7 +1,7 @@
 module.exports =  class BaseModel {
     constructor(){
-        this.table = '', //数据库表名
-        this.model = {}, //该表的所有字段
+        this.table = '' //数据库表名
+        this.model = {} //该表的所有字段
         this.params = {} //传入参数
         this.fillModel()
     }
