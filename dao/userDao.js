@@ -8,7 +8,7 @@ module.exports = {
         return new Promise((resolve,reject)=>{
             getConnection().then( _conn =>{
                 let conn = _conn
-                let userModel = new UserModel(request.body)
+                let userModel = new UserModel(request.body.data)
                 let sql = userModel.selectByKeys()
                 conn.query(sql,function(error,result) {
                     if(error){
@@ -16,7 +16,7 @@ module.exports = {
                     }
                     if (result) {
                         if(result.length){
-                            resolve(result)
+                            resolve(result[0])
                         }else{
                             reject('用户名或密码错误') 
                         }  
@@ -32,7 +32,7 @@ module.exports = {
         return new Promise((resolve,reject)=>{
             getConnection().then(_conn=>{
                 let conn = _conn
-                let userModel = new UserModel(request.body)
+                let userModel = new UserModel(request.body.data)
                 let sql = userModel.selectAll()
                 conn.query(sql,function(error,result) {
                     if(error){
@@ -50,7 +50,7 @@ module.exports = {
 
     },
     setUser : (request) => {
-        let { id , name , password , role } = request.body
+        let { id , name , password , role } = request.body.data
         return new Promise((resolve,reject)=>{
             let params = {
                 id:id,
@@ -76,7 +76,7 @@ module.exports = {
     },
 
     addUser : (request) => {
-        let { name , password , role } = request.body
+        let { name , password , role } = request.body.data
         return new Promise((resolve,reject)=>{
             let params = {
                 name:name,
@@ -102,7 +102,7 @@ module.exports = {
 
     getMenuList: (request) => {
         return new Promise((resolve,reject)=>{
-            let { uid } = request.body
+            let { uid } = request.body.data
             getConnection().then(_conn=>{
                 let conn = _conn
                 let userModel = new UserModel({ id:uid })
@@ -115,20 +115,31 @@ module.exports = {
                         if(result.length){
                             RoleDao.getRoles(result[0].role).then(res=>{ // 2.从角色表中取出pageIds
                                 let roles = res
-                                let pageIds = []
+                                let pageIds = [],pageActionMap = {}
                                 roles.forEach(item=>{
                                     if(item.pages){
                                         let pagesArr = item.pages.split('#')
                                         pagesArr.forEach((_page_id)=>{
-                                            if(!pageIds.indexOf(_page_id)>-1){
+                                            if(!pageIds.indexOf(_page_id)>-1 && !_page_id.includes('_')){
                                                 pageIds.push(_page_id)
+                                            }
+                                            if(_page_id.includes('_')){ // 8_1 8_2  8页面的操作权限
+                                                let arr = _page_id.split('_')
+                                                !pageIds.indexOf(arr[0])>-1 && (pageIds.push(arr[0]))
+                                                pageActionMap[arr[0]] = pageActionMap[arr[0]] ? pageActionMap[arr[0]]:[]
+                                                pageActionMap[arr[0]].push(arr[1])
                                             }
                                         })
                                     }
                                 })
                                 PageDao.getPagesByIds(pageIds).then(res=>{ // 3.从page表中取出page
-                                    resolve(res)
-                                }).catch(err=>{
+                                    let result = res.reduce((a,b)=>{  //加上操作权限
+                                        b.actions = pageActionMap[b.id] ? pageActionMap[b.id] : []
+                                        a.push(b)
+                                        return a
+                                    },[])
+                                    resolve(result)
+                                }).catch(err=>{ 
                                     reject(err)
                                 })
                             }).catch(err=>{

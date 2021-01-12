@@ -6,9 +6,9 @@
             <BreadcrumbItem>页面列表</BreadcrumbItem>
         </Breadcrumb>
     </div>
-    <!-- <div class="margin-bottom-30 text-left">
+    <div class="margin-bottom-30 text-left">
         <Button type="primary" @click="add">添加页面</Button>
-    </div> -->
+    </div>
     <Table ref="table"  border :columns="columns" :data="pageList">
         <template slot-scope="props" slot="action">
             <div v-if="props.rowInfo.actions">
@@ -33,6 +33,16 @@
             </FormItem>
             <FormItem label="icon：" required>
                 <Input v-model="formData.icon" :icon="formData.icon"></Input>
+            </FormItem>
+            <FormItem label="父级菜单：" required v-if="!pageId">
+                  <Select multiple  clearable transfer v-model="formData.parent_id" placeholder="请选择父级页面">
+                    <Option
+                      :key="item.id"
+                      :value="item.id"
+                      v-for="(item, index) in parentMenu">
+                      {{item.title}}
+                    </Option>
+                  </Select>
             </FormItem>
             <FormItem label="操作权限：" required>
                   <Select multiple  clearable transfer v-model="formData.actions" placeholder="请选择页面操作权限">
@@ -63,6 +73,7 @@ export default {
                 title:"",
                 name:"",
                 icon:"",
+                parent_id:"",
                 actions:[]
             },
             pageList:[],
@@ -97,9 +108,9 @@ export default {
         },
         getPageList(){
             this.$fetch({
-                url:'http://127.0.0.1:3000/system/getPageList',
+                url:'/api/system/getPageList',
             }).then((res=>{
-                this.pageList = res.data.data
+                this.pageList = res.data
             }))
         },
 
@@ -125,7 +136,7 @@ export default {
         },
         modifyConfirm(data){
             this.$fetch({
-                url:'http://127.0.0.1:3000/system/setPage',
+                url:'/api/system/setPage',
                 method:'post',
                 data: data
             }).then(res=>{
@@ -135,19 +146,26 @@ export default {
         },
         addConfirm(data){
             this.$fetch({
-                url:'http://127.0.0.1:3000/system/addPage',
+                url:'/api/system/addPage',
                 method:'post',
                 data: data
             }).then(res=>{
                 this.$Message.success( res.data.msg || '添加成功!')
                 window.location.reload()
             })
+        },
+        getParentMenu(list){
+            return list.filter((item)=>{
+                return !item.parent_id
+            })
         }
-
     },
 
-    mounted(){
+    created(){
         this.actionMap = this.$store.state.user.actionMap
+        this.$store.dispatch('getAllMenuList').then(res=>{
+            this.parentMenu = this.getParentMenu(res.data || [])
+        })
         this.getPageList()
     }
 

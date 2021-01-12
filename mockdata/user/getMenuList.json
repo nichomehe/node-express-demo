@@ -4,31 +4,138 @@
     "data":[
         {
             "id":1,
+            "title":"分类A",
             "name":"oneBase",
-            "title":"分类一一",
-            "parent_id":"",
-            "actions":[1,2]
+            "parent_id":null,
+            "actions":[
+
+            ],
+            "icon":"ios-bowtie"
         },
         {
             "id":2,
+            "title":"页面a",
             "name":"pageOne",
-            "title":"页面一一",
-            "parent_id":"1",
-            "actions":[1,2]
+            "parent_id":1,
+            "actions":[
+                "0",
+                "3"
+            ],
+            "icon":"md-bulb"
         },
         {
             "id":3,
+            "title":"分类B",
             "name":"twoBase",
-            "title":"分类二二",
-            "parent_id":"",
-            "actions":[1,2]
+            "parent_id":null,
+            "actions":[
+
+            ],
+            "icon":"md-bug"
         },
         {
             "id":4,
+            "title":"页面b",
             "name":"pageTwo",
-            "title":"页面二二",
-            "parent_id":"3",
-            "actions":[1,2]
+            "parent_id":3,
+            "actions":[
+                "0",
+                "1",
+                "2"
+            ],
+            "icon":"logo-buffer"
+        },
+        {
+            "id":5,
+            "title":"分类C",
+            "name":"thrBase",
+            "parent_id":null,
+            "actions":[
+
+            ],
+            "icon":"md-happy"
+        },
+        {
+            "id":6,
+            "title":"页面c",
+            "name":"pageThr",
+            "parent_id":5,
+            "actions":[
+                "0",
+                "4"
+            ],
+            "icon":"md-cube"
+        },
+        {
+            "id":7,
+            "title":"分类D",
+            "name":"fourBase",
+            "parent_id":null,
+            "actions":[
+
+            ],
+            "icon":"logo-freebsd-devil"
+        },
+        {
+            "id":8,
+            "title":"页面d",
+            "name":"pageFour",
+            "parent_id":7,
+            "actions":[
+                "0",
+                "1",
+                "2",
+                "3",
+                "4"
+            ],
+            "icon":"md-heart"
+        },
+        {
+            "id":9,
+            "title":"系统管理",
+            "name":"systemBase",
+            "parent_id":null,
+            "actions":[
+
+            ],
+            "icon":"md-cog"
+        },
+        {
+            "id":10,
+            "title":"角色列表",
+            "name":"roleList",
+            "parent_id":9,
+            "actions":[
+                "0",
+                "1",
+                "3"
+            ],
+            "icon":null
+        },
+        {
+            "id":11,
+            "title":"用户列表",
+            "name":"userList",
+            "parent_id":9,
+            "actions":[
+                "0",
+                "1",
+                "2",
+                "3"
+            ],
+            "icon":"ios-people"
+        },
+        {
+            "id":12,
+            "title":"页面列表",
+            "name":"pageList",
+            "parent_id":9,
+            "actions":[
+                "0",
+                "1",
+                "4"
+            ],
+            "icon":"ios-book"
         }
     ]
 }

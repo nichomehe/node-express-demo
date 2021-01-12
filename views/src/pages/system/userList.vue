@@ -85,18 +85,18 @@ export default {
         },
         getUserList(){
             this.$fetch({
-                url:'http://127.0.0.1:3000/user/getUserList',
+                url:'/api/user/getUserList',
                 method:'post'
             }).then((res=>{
-                this.userList = res.data.data
+                this.userList = res.data
             }))
         },
         getRoleList(){
             this.$fetch({
-                url:'http://127.0.0.1:3000/system/getRoleList',
+                url:'/api/system/getRoleList',
                 method:'post'
             }).then((res=>{
-                this.roleList = res.data.data
+                this.roleList = res.data
             }))
         },
         add(){
@@ -122,7 +122,7 @@ export default {
         },
         modifyConfirm(data){
             this.$fetch({
-                url:'http://127.0.0.1:3000/user/setUser',
+                url:'/api/user/setUser',
                 method:'post',
                 data: data
             }).then(res=>{
@@ -132,7 +132,7 @@ export default {
         },
         addConfirm(data){
             this.$fetch({
-                url:'http://127.0.0.1:3000/user/addUser',
+                url:'/api/user/addUser',
                 method:'post',
                 data: data
             }).then(res=>{

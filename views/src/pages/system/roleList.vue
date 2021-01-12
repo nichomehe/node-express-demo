@@ -34,6 +34,8 @@
 </template>
 
 <script>
+import Router from '@/router/router'
+import  { creatTreeData } from '@/store/utils'
 export default {
   name: 'roleList',
     data () {
@@ -48,6 +50,7 @@ export default {
             columns:[
                 { title: 'id', align: 'center', key: 'id',  minWidth: 110 },
                 { title: '角色名称', align: 'center', key: 'name',  minWidth: 110 },
+                { title: '页面权限', align: 'center', key: 'pages',  minWidth: 150 },
                 { title: '操作', align: 'center', key: 'action',  minWidth: 110 ,
                     render: (h, params) => {
                         return h('div', this.$refs.table['$scopedSlots'].action({ rowInfo: params.row}))
@@ -68,22 +71,21 @@ export default {
         },
         getRoleList(){
             this.$fetch({
-                url:'http://127.0.0.1:3000/system/getRoleList',
+                url:'/api/system/getRoleList',
                 method:'post'
             }).then((res=>{
-                this.roleList = res.data.data
+                this.roleList = res.data
             }))
+        },
+        add(){
+            this.showModal = true
         },
         treeCheckChange(){
             this.treeList = JSON.parse(JSON.stringify(this.treeList))
         },
-        add(){
-            this.treeList = JSON.parse(JSON.stringify(this.$store.state.user.allMenuList))
-            this.showModal = true
-        },
         modify(row){
             let checkPages =  row.pages.split('#') || []
-            let list = []
+						let list = []
             this.treeList.forEach(item => {
                 if(item.children && item.children.length){
                     item.checked = false
@@ -130,8 +132,9 @@ export default {
             this.roleId?this.modifyConfirm(params):this.addConfirm(params)
         },
         modifyConfirm(data){
+            debugger
             this.$fetch({
-                url:'http://127.0.0.1:3000/system/setRole',
+                url:'/api/system/setRole',
                 method:'post',
                 data: data
             }).then(res=>{
@@ -141,21 +144,28 @@ export default {
         },
         addConfirm(data){
             this.$fetch({
-                url:'http://127.0.0.1:3000/system/addRole',
+                url:'/api/system/addRole',
                 method:'post',
                 data: data
             }).then(res=>{
                 this.$Message.success( res.data.msg || '添加成功!')
                 window.location.reload()
             })
+        },
+        getAllMenuList(){
+            this.$store.dispatch('getAllMenuList').then(res=>{
+								let list = res.data || []
+								this.treeList = creatTreeData(Router,list,this.$store.state.user.actionMap) || []
+            })
         }
+
 
     },
 
-  mounted(){
-      this.treeList = JSON.parse(JSON.stringify(this.$store.state.user.allMenuList))
-      this.getRoleList()
-  }
+  created(){
+			this.getAllMenuList()
+			this.getRoleList() //9#11#10#12#1#2#2_1#2_2#3#4#5#6#7#8  
+	}
 
 }
 </script>
@@ -166,3 +176,5 @@ export default {
     padding: 50px;
 }
 </style>
+
+

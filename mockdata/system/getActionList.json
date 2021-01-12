@@ -3,6 +3,11 @@
     "msg":"",
     "data":[
         {
+            "id":0,
+            "info": "view",
+            "title": "查看"
+        },
+        {
             "id":1,
             "info": "add",
             "title": "添加"

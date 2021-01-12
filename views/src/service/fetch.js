@@ -3,9 +3,9 @@ import axios from 'axios'
 import Qs from 'qs'
 import { filterData , setStorage , getStorage} from './utils'
 
-export const fetch = (params) => {
+export default  fetch = (params) => {
     return new Promise((resolve,reject)=>{
-        filterData(params.data)   //删除空参数
+        // filterData(params.data)   //删除空参数
         let method = params.method?params.method.toLowerCase():'get'
         let oData = {
             url:params.url,
@@ -19,11 +19,9 @@ export const fetch = (params) => {
         if(getStorage('token')){
             oData.headers.token = getStorage('token')
         }
-        if(method === 'get'){
-            oData.params = params.data
-        }else{
-            oData.data = Qs.stringify(params.data)
-        }
+
+            // oData.data = Qs.stringify(params.data)
+        oData.data = params || {}
         axios(oData).then( res => {
             if(res.headers && res.headers.token){
                 setStorage('token',res.headers.token)

@@ -53,21 +53,21 @@ export default {
     },
     loginAction(){
         this.$fetch({
-            url:'http://127.0.0.1:3000/user/login',
+            url:'/api/user/login',
             method:'post',
             data:this.userInfo
         }).then((res=>{
-            if(!res.data.code){
+            if(!res.code){
                 this.$Message.success('登陆成功!')
-                this.setUserInfo(res.data.data[0])
-                localStorage.setItem('uid',res.data.data[0].id)
-                localStorage.setItem('name',res.data.data[0].name)
+                this.setUserInfo(res.data[0])
+                localStorage.setItem('uid',res.data.id)
+                localStorage.setItem('name',res.data.name)
                 let timer = setTimeout(()=>{
                     this.$router.push({name:"home"})
                     timer = null
                 },1500)
             }else{
-                this.$Message.error(res.data.msg || '用户名或密码错误');
+                this.$Message.error(res.msg || '用户名或密码错误');
             }
         }))
     }

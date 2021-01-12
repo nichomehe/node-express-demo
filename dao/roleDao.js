@@ -45,7 +45,7 @@ module.exports = {
     },
 
     setRole : (request) => {
-        let { id , name , pages } = request.body
+        let { id , name , pages } = request.body.data
         return new Promise((resolve,reject)=>{
             let params = {
                 id:id,
@@ -56,6 +56,7 @@ module.exports = {
                 let conn = _conn
                 let roleModel = new RoleModel(params)
                 let sql = roleModel.update()
+                console.log('sql====',sql)
                 conn.query(sql,function(error,result) {
                     if(error){
                         reject('修改失败') 
@@ -70,7 +71,7 @@ module.exports = {
     },
 
     addRole : (request) => {
-        let { name , pages } = request.body
+        let { name , pages } = request.body.data
         return new Promise((resolve,reject)=>{
             let params = {
                 name:name,

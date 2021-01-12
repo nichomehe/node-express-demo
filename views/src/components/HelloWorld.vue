@@ -17,7 +17,7 @@ export default {
   methods:{
     init() {
       this.$fetch({
-        url:'http://127.0.0.1:3000/user/getUserList',
+        url:'/api/user/getUserList',
         method:'post',
         headers:{
 
@@ -26,7 +26,7 @@ export default {
           id:1
         }
       }).then((res=>{
-        this.userList = res.data.data
+        this.userList = res.data
       }))
     }
   },

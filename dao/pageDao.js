@@ -71,7 +71,7 @@ module.exports = {
     },
 
     setPage: (request) => {
-        let { id , title , name , icon , actions } = request.body
+        let { id , title , name , icon , actions } = request.body.data
         return new Promise((resolve,reject)=>{
             let params = {
                 id:id,
@@ -99,7 +99,7 @@ module.exports = {
     },
 
     addPage: (request) => {
-        let {  title , name , icon , actions } = request.body
+        let {  title , name , icon , actions } = request.body.data
         return new Promise((resolve,reject)=>{
             let params = {
                 title:title,

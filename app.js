@@ -5,11 +5,14 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var logger = require('morgan');
 var ejs = require('ejs');
+
+// 模块化接口
 var userApi = require('./controller/user');
 var systemApi = require('./controller/system');
 
+ //使用mock数据
 var args = process.argv.splice(2)
-var useMock = args.includes('mock') //使用mock数据
+var useMock = args.includes('mock')
 
 var app = express();
 
@@ -17,6 +20,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.engine('.html' , ejs.__express);
 app.set('view engine', 'html');
+//zhong jia ni a
 
 
 app.use(logger('dev'));  
@@ -34,12 +38,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.all('*', (req, res, next) => {
   const { origin, Origin, referer, Referer } = req.headers;
   const allowOrigin = origin || Origin || referer || Referer || '*';
-  res.header("Access-Control-Allow-Origin",allowOrigin  );  //允许跨域
+  res.header("Access-Control-Allow-Origin",allowOrigin  );  //允许浏览器请求的域
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
-  res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+  res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS"); //允许浏览器请求的方法
   res.header("Access-Control-Allow-Credentials", true); //可以带cookies
   res.header("X-Powered-By", 'Express');
-  if(useMock){  //mock数据
+  //mock数据
+  if(useMock){  
     let thePath = 'mockdata'+req.path
     res.sendFile(path.join(__dirname, './'+ thePath + '.json'))
   }else{
@@ -52,7 +57,7 @@ app.all('*', (req, res, next) => {
 
 });
 
-//接口处理
+//接口模块化
 app.use('/user', userApi);
 app.use('/system', systemApi);
 

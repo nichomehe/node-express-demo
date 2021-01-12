@@ -1,13 +1,13 @@
-import axios from 'axios'
-import CreatMenu from '../utils'
+import CreatMenu , {creatTreeData} from '../utils'
 import routerData from '@/router/router'
- 
+import fetch from '@/service/fetch'
+
 export default {
     state: {
         userInfo:null, //用户信息
         menuList:null, //渲染左边侧栏
-        allMenuList:null,
-        actionMap:null,
+        allMenuList:null, //所有页面list
+        actionMap:null, //所有操作的map
       },
       mutations: {
         setMenuList (state, list) {
@@ -26,17 +26,14 @@ export default {
       actions: {
         getAccessInfo ({ dispatch,state, commit }) {
           return new Promise((resolve, reject) => {
-            Promise.all([dispatch('getActionList'),dispatch('getMenuList'),dispatch('getAllMenuList')]).then(res=>{
-                let createList = (data)=> {
-                  let creatMenu = new CreatMenu(routerData,data,state.actionMap)
-                  let menuList = creatMenu.creatRouterData()
-                  return menuList
-                }
-                let accessData = res[1].data
-                let allMenuData = res[2].data
-                let allMenuList = createList(allMenuData)
-                let menuList = createList(accessData)
-                commit('setAllMenuList', allMenuList)
+            Promise.all([dispatch('getActionList'),dispatch('getMenuList')]).then(res=>{
+                let actionMap = res[0].reduce((a,b)=>{
+                  a[b.id] = b
+                  return a
+                },{})
+                let accessData = res[1] || []
+                let menuList = new CreatMenu(routerData,accessData,actionMap).creatRouterData()
+                commit('setActionMap',actionMap)
                 commit('setMenuList', menuList)
                 resolve(menuList)
             }).catch(err=>{
@@ -46,8 +43,8 @@ export default {
         },
         getMenuList(){
           return new Promise((resolve,reject)=>{
-            axios({
-              url: 'http://127.0.0.1:3000/system/getMenuList',
+            fetch({
+              url: '/api/system/getMenuList',
               method: 'POST',
               data:{
                 uid:localStorage.getItem('uid')
@@ -61,11 +58,11 @@ export default {
         },
         getAllMenuList(){
           return new Promise((resolve,reject)=>{
-            axios({
-              url: 'http://127.0.0.1:3000/system/getAllMenuList',
+            fetch({
+              url: '/api/system/getAllMenuList',
               method: 'POST',
             }).then(res=>{
-              resolve(res.data)
+              resolve(res)
             }).catch(err=>{
               reject(err)
             })
@@ -73,16 +70,11 @@ export default {
         },
         getActionList ({state,commit}){
           return new Promise((resolve,reject)=>{
-            axios({
-              url: 'http://127.0.0.1:3000/system/getActionList',
+            fetch({
+              url: '/api/system/getActionList',
               method: 'post'
             }).then(res=>{
-              let _actionMap = res.data.data.reduce((a,b)=>{
-                a[b.id] = b
-                return a
-              },{})
-              commit('setActionMap',_actionMap)
-              resolve(res)
+              resolve(res.data || [])
             }).catch(err=>{
               reject(err)
             })

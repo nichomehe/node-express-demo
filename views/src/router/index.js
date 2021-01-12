@@ -34,10 +34,6 @@ router.beforeEach((to, from, next) => {
   if (store.state.user.menuList || to.name == 'login') {
     next()
   } else {
-    if(!localStorage.getItem('uid')){
-      next({ path: '/login' })
-      return
-    }
     store.dispatch('getAccessInfo').then(res => {
       router.addRoutes(res)
       next({ path: to.redirectedFrom || to.path })
