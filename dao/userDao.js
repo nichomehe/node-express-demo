@@ -8,7 +8,7 @@ module.exports = {
         return new Promise((resolve,reject)=>{
             getConnection().then( _conn =>{
                 let conn = _conn
-                let userModel = new UserModel(request.body.data)
+                let userModel = new UserModel(request.body)
                 let sql = userModel.selectByKeys()
                 conn.query(sql,function(error,result) {
                     if(error){
@@ -32,7 +32,7 @@ module.exports = {
         return new Promise((resolve,reject)=>{
             getConnection().then(_conn=>{
                 let conn = _conn
-                let userModel = new UserModel(request.body.data)
+                let userModel = new UserModel(request.body)
                 let sql = userModel.selectAll()
                 conn.query(sql,function(error,result) {
                     if(error){
@@ -50,7 +50,7 @@ module.exports = {
 
     },
     setUser : (request) => {
-        let { id , name , password , role } = request.body.data
+        let { id , name , password , role } = request.body
         return new Promise((resolve,reject)=>{
             let params = {
                 id:id,
@@ -76,7 +76,7 @@ module.exports = {
     },
 
     addUser : (request) => {
-        let { name , password , role } = request.body.data
+        let { name , password , role } = request.body
         return new Promise((resolve,reject)=>{
             let params = {
                 name:name,
@@ -102,7 +102,7 @@ module.exports = {
 
     getMenuList: (request) => {
         return new Promise((resolve,reject)=>{
-            let { uid } = request.body.data
+            let { uid } = request.body
             getConnection().then(_conn=>{
                 let conn = _conn
                 let userModel = new UserModel({ id:uid })

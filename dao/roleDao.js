@@ -45,7 +45,7 @@ module.exports = {
     },
 
     setRole : (request) => {
-        let { id , name , pages } = request.body.data
+        let { id , name , pages } = request.body
         return new Promise((resolve,reject)=>{
             let params = {
                 id:id,
@@ -71,7 +71,7 @@ module.exports = {
     },
 
     addRole : (request) => {
-        let { name , pages } = request.body.data
+        let { name , pages } = request.body
         return new Promise((resolve,reject)=>{
             let params = {
                 name:name,

@@ -1,0 +1,23 @@
+{
+  "zh-cn": {
+    "action": {
+      "add":"添加",
+      "delete":"删除",
+      "modify":"修改"
+    }
+  },
+  "id-ID": {
+    "action": {
+      "add":"添加 ID",
+      "delete":"删除 ID",
+      "modify":"修改 ID"
+    }
+  },
+  "en": {
+    "action": {
+      "add":"add",
+      "delete":"delete",
+      "modify":"modify"
+    }
+  }
+}

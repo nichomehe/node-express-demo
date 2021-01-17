@@ -21,7 +21,7 @@ export default  fetch = (params) => {
         }
 
             // oData.data = Qs.stringify(params.data)
-        oData.data = params || {}
+        oData.data = params.data || {}
         axios(oData).then( res => {
             if(res.headers && res.headers.token){
                 setStorage('token',res.headers.token)

@@ -5,9 +5,7 @@ import Main from '@/components/Main'
 import HelloWorld from '@/components/HelloWorld'
 import Login from '@/pages/login'
 
-
-Vue.use(Router)
-
+//不需要鉴权的页面
 let router =  new Router({
   routes: [
     {
@@ -29,13 +27,16 @@ let router =  new Router({
     }
   ]
 })
+Vue.use(Router)
+
 // 路由跳转前的拦击
 router.beforeEach((to, from, next) => {
-  if (store.state.user.menuList || to.name == 'login') {
+  if (to.name == 'login' || store.state.routerList ) {
     next()
   } else {
-    store.dispatch('getAccessInfo').then(res => {
-      router.addRoutes(res)
+    store.dispatch('getAccessInfo').then(accessRoutes => {
+      router.addRoutes(accessRoutes)
+      console.log('accessRoutes',accessRoutes)
       next({ path: to.redirectedFrom || to.path })
     })
   }

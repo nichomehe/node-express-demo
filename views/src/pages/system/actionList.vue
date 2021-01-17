@@ -3,11 +3,11 @@
     <div class="text-left margin-bottom-40">
         <Breadcrumb>
             <BreadcrumbItem>系统设置</BreadcrumbItem>
-            <BreadcrumbItem>用户列表</BreadcrumbItem>
+            <BreadcrumbItem>操作列表</BreadcrumbItem>
         </Breadcrumb>
     </div>
     <div class="margin-bottom-30 text-left">
-        <Button type="primary" @click="add">添加用户</Button>
+        <Button type="primary" @click="add">添加操作</Button>
     </div>
     <Table ref="table" width="550" border :columns="columns" :data="userList">
         <template slot-scope="props" slot="action">
@@ -16,25 +16,15 @@
     </Table>
     <Modal
         v-model="showModal"
-        :title="userId?'修改用户信息':'添加用户'"
+        :title="actionId?'修改操作':'添加操作'"
         @on-ok="confirm"
         @on-visible-change="modalStatusChange">
         <Form :model="formData" label-position="left" :label-width="60">
-            <FormItem label="姓名：" required>
-                <Input v-model="formData.name"></Input>
+            <FormItem label="操作名：" required>
+                <Input v-model="formData.title"></Input>
             </FormItem>
-            <FormItem label="密码：" required>
-                <Input v-model="formData.password" type="password"></Input>
-            </FormItem>
-            <FormItem label="角色：" required>
-                  <Select multiple  clearable transfer v-model="formData.role" placeholder="请选择用户角色">
-                    <Option
-                      :key="index"
-                      :value="String(option.id)"
-                      v-for="(option, index) in roleList">
-                      {{option.name}}
-                    </Option>
-                  </Select>
+            <FormItem label="操作code" required>
+                <Input v-model="formData.info" type="password"></Input>
             </FormItem>
         </Form>
 
@@ -45,18 +35,17 @@
 
 <script>
 export default {
-  name: 'userList',
+  name: 'actionList',
     data () {
         return {
             showModal:false,
-            userId: "",
+            actionId: "",
             formData:{
-                name:"",
-                password:"",
-                role:""
+                id:"",
+                title:"",
+                info:""
             },
-            userList:[],
-            roleList:[],
+            actionList:[],
             columns:[
                 { title: 'id', align: 'center', key: 'id',  minWidth: 110 },
                 { title: '姓名', align: 'center', key: 'name',  minWidth: 110 },
@@ -70,33 +59,12 @@ export default {
         }
     },
     methods:{
-        modalStatusChange(show){
-            let self = this
-            if(!show){
-                this.userId = ""
-                for(let key in self.formData){
-                    self.formData[key] = ""
-                }
-            }else{
-                if(!this.roleList.length){
-                    this.getRoleList()
-                }
-            }
-        },
-        getUserList(){
+        getActionList(){
             this.$fetch({
-                url:'/api/user/getUserList',
+                url:'/api/system/getActionList',
                 method:'post'
             }).then((res=>{
-                this.userList = res.data
-            }))
-        },
-        getRoleList(){
-            this.$fetch({
-                url:'/api/system/getRoleList',
-                method:'post'
-            }).then((res=>{
-                this.roleList = res.data
+                this.actionList = res.data
             }))
         },
         add(){
@@ -104,7 +72,7 @@ export default {
         },
         modify(row){
             let self = this
-            this.userId = row.id
+            this.actionId = row.id
             Object.keys(this.formData).forEach(key=>{
                 row[key] && (self.formData[key] = row[key])
             })
@@ -113,12 +81,12 @@ export default {
         },
         confirm(){
             let params = {}
-            if(this.userId){
-                params.id = this.userId
+            if(this.actionId){
+                params.id = this.actionId
             }
             Object.assign(params,this.formData)
             params.role = this.formData.role.join("#")
-            this.userId?this.modifyConfirm(params):this.addConfirm(params)
+            this.actionId?this.modifyConfirm(params):this.addConfirm(params)
         },
         modifyConfirm(data){
             this.$fetch({

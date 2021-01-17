@@ -6,6 +6,12 @@
                     <Icon type="md-planet" />
                     <span class="f-20">Node Demo</span>
                 </div>
+                <span class="f-12 color-f">{{$t('search')}}</span>
+                <Select transfer v-model="lang" style="width:100px" @on-change="changeLang">                    
+                    <Option value="zh-cn">中文</Option>
+                    <Option value="en">英文</Option>
+                    <Option value="id-ID">印尼</Option>
+                </Select>
                 <div class="header-user">
                     <span>Welcome {{userName}}~</span>
                     <span class="color-theme f-12" @click="logout">退出登录</span>
@@ -52,7 +58,8 @@ export default {
   data() {
     return {
       activeMenuName:'pageOne',
-      openNames:[]
+      openNames:[],
+      lang:''
     };
   },
   methods: {
@@ -64,11 +71,15 @@ export default {
         localStorage.removeItem('name')
         window.location.hash = '#/login'
         window.reload()
+    },
+    changeLang(val){
+        localStorage.setItem('lang',val)
+        window.location.reload()
     }
   },
   computed:{
     menuList(){
-        return this.$store.state.user.menuList
+        return this.$store.state.routerList
     },
     userName(){
         return localStorage.getItem('name') || ''
@@ -80,6 +91,7 @@ export default {
     this.$route.matched.forEach(item => {
       self.openNames.push(item.name)
     })
+    this.lang = localStorage.getItem('lang') || 'zh-cn'
   }
 };
 </script>

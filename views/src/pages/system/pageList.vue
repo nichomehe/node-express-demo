@@ -1,9 +1,12 @@
+<i18n src="./locale/system.json"></i18n>
+
 <template>
   <div class="system-config">
     <div class="text-left margin-bottom-40">
         <Breadcrumb>
             <BreadcrumbItem>系统设置</BreadcrumbItem>
             <BreadcrumbItem>页面列表</BreadcrumbItem>
+            <BreadcrumbItem>{{$t('action.add')}}---{{$t('search')}}</BreadcrumbItem>
         </Breadcrumb>
     </div>
     <div class="margin-bottom-30 text-left">
@@ -77,6 +80,7 @@ export default {
                 actions:[]
             },
             pageList:[],
+            parentMenu:[],
             columns:[
                 { title: 'id', align: 'center', key: 'id',  minWidth: 60 },
                 { title: 'title', align: 'center', key: 'title',  minWidth: 110 },
@@ -141,7 +145,7 @@ export default {
                 data: data
             }).then(res=>{
                 this.$Message.success( res.data.msg || '修改成功!')
-                window.location.reload()
+                this.getPageList()
             })
         },
         addConfirm(data){
@@ -151,7 +155,7 @@ export default {
                 data: data
             }).then(res=>{
                 this.$Message.success( res.data.msg || '添加成功!')
-                window.location.reload()
+                this.getPageList()
             })
         },
         getParentMenu(list){
@@ -162,7 +166,7 @@ export default {
     },
 
     created(){
-        this.actionMap = this.$store.state.user.actionMap
+        this.actionMap = this.$store.state.actionMap
         this.$store.dispatch('getAllMenuList').then(res=>{
             this.parentMenu = this.getParentMenu(res.data || [])
         })

@@ -1,6 +1,6 @@
 let { getConnection } = require('./utils')
 let PageModel = require('../model/pageModel')
-// controller(路由)  => dao(操作数据库) => model(数据库模型、一张表对应一个类)
+// controller(路由)  => dao(操作数据库) => model(数据库模型、一张表对应一个类、sql语句拼接)
 
 module.exports = {
     getAllPages :  (request) => {
@@ -71,7 +71,7 @@ module.exports = {
     },
 
     setPage: (request) => {
-        let { id , title , name , icon , actions } = request.body.data
+        let { id , title , name , icon , actions } = request.body
         return new Promise((resolve,reject)=>{
             let params = {
                 id:id,
@@ -84,7 +84,6 @@ module.exports = {
                 let conn = _conn
                 let pageModel = new PageModel(params)
                 let sql = pageModel.update()
-                console.log('sql====',sql)
                 conn.query(sql,function(error,result) {
                     if(error){
                         reject('修改失败') 
@@ -99,7 +98,7 @@ module.exports = {
     },
 
     addPage: (request) => {
-        let {  title , name , icon , actions } = request.body.data
+        let {  title , name , icon , actions } = request.body
         return new Promise((resolve,reject)=>{
             let params = {
                 title:title,

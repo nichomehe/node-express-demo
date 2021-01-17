@@ -73,7 +73,7 @@ export default {
     }
   },
   mounted(){
-    this.setMenuList(null)
+    this.setRouterList(null)
   }
 
 }

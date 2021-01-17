@@ -20,7 +20,6 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.engine('.html' , ejs.__express);
 app.set('view engine', 'html');
-//zhong jia ni a
 
 
 app.use(logger('dev'));  
@@ -34,7 +33,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-//设置返回的http请求头
+//设置返回的http请求头 
 app.all('*', (req, res, next) => {
   const { origin, Origin, referer, Referer } = req.headers;
   const allowOrigin = origin || Origin || referer || Referer || '*';
