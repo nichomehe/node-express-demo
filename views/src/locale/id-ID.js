@@ -1,3 +1,3 @@
 export default {
-  search:"search id"
+  "search":"pertanyaan"
 }

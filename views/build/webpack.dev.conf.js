@@ -22,11 +22,19 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 
   // these devServer options should be customized in /config/index.js
   devServer: {
+    proxy: config.dev.proxyTable,
     clientLogLevel: 'warning',
     historyApiFallback: {
       rewrites: [
         { from: /.*/, to: path.posix.join(config.dev.assetsPublicPath, 'index.html') },
       ],
+    },
+    before: app => {
+      app.all(/^(\/api)/, function(req, res) {
+        let thePath = req.path.replace(/api/, 'mockdata');
+        const apiFile = path.join(__dirname, '../'+thePath + ".json")
+        return res.sendFile(apiFile)
+      })
     },
     hot: true,
     contentBase: false, // since we use CopyWebpackPlugin.
@@ -38,7 +46,6 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       ? { warnings: false, errors: true }
       : false,
     publicPath: config.dev.assetsPublicPath,
-    proxy: config.dev.proxyTable,
     quiet: true, // necessary for FriendlyErrorsPlugin
     watchOptions: {
       poll: config.dev.poll,

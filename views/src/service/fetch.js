@@ -1,7 +1,6 @@
 
 import axios from 'axios'
-import Qs from 'qs'
-import { filterData , setStorage , getStorage} from './utils'
+import {  setStorage , getStorage} from './utils'
 
 export default  fetch = (params) => {
     return new Promise((resolve,reject)=>{

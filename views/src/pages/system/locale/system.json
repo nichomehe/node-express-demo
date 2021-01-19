@@ -8,9 +8,9 @@
   },
   "id-ID": {
     "action": {
-      "add":"添加 ID",
-      "delete":"删除 ID",
-      "modify":"修改 ID"
+      "add":"tambah ke",
+      "delete":"hapus",
+      "modify":"ubah"
     }
   },
   "en": {

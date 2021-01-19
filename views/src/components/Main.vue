@@ -12,6 +12,7 @@
                     <Option value="en">英文</Option>
                     <Option value="id-ID">印尼</Option>
                 </Select>
+                <span class="color-f">菜单列表页有分模块的语言配置</span>
                 <div class="header-user">
                     <span>Welcome {{userName}}~</span>
                     <span class="color-theme f-12" @click="logout">退出登录</span>
@@ -20,25 +21,24 @@
             <Layout>
                 <Sider ref="side" breakpoint="md" hide-trigger collapsible :collapsed-width="100"  :style="{background: '#fff'}">
                     <Menu :active-name="activeMenuName" :open-names="openNames" theme="light" width="auto" accordion>
-                        <Submenu :name="item.name" v-for="(item,index) in menuList" :key="index">
-                            <template slot="title">
-                                <Icon :type="item.icon || 'ios-navigate'"></Icon>
-                                {{item.title || item.meta.title}}
-                            </template>
-                            <template v-if="item.children && item.children.length">
-                                <template v-for="(cItem,cIndex) in item.children">
-                                    <Submenu v-if="cItem.children && cItem.children.length" :name="cItem.name" class="margin-left-15" :key="'c'+cIndex">
-                                        <template slot="title">
-                                            {{cItem.title || cItem.meta.title}}
-                                        </template>
-                                        <template v-if="cItem.children && cItem.children.length">
-                                            <MenuItem :name="ccItem.name" v-for="(ccItem,ccIndex) in cItem.children" :key="'cc'+ccIndex"  @click.native="sideMenuClick(ccItem)">{{ccItem.title ||  ccItem.meta.title}}</MenuItem>
-                                        </template>
-                                    </Submenu>
-                                    <MenuItem v-else :name="cItem.name"  :key="'c'+cIndex" @click.native="sideMenuClick(cItem)">{{cItem.title || cItem.meta.title}}</MenuItem>
+                        <div v-for="(v, index) in menuList"  :key="index">
+                            <Submenu :name="v.name" >
+                                <template slot="title">
+                                    <span class="text-ellipsis">
+                                        <span><Icon :type="v.meta.icon"></Icon></span>
+                                        <span>{{v.meta.title}}</span>
+                                    </span>
                                 </template>
-                            </template>
-                        </Submenu>
+                                <div v-for="(cur, k) in v.children" :key="k">
+                                    <template v-if=" cur.children && cur.children.length">
+                                        <SideMenuItem :cur="cur" @handleSkip="sideMenuClick(cur)"></SideMenuItem>
+                                    </template>
+                                    <MenuItem v-else  @click.native="sideMenuClick(cur)" :name="cur.name">
+                                        {{cur.meta.title}}
+                                    </MenuItem>
+                                </div>
+                            </Submenu>
+                        </div>
                     </Menu>
                 </Sider>
                 <Layout >
@@ -53,8 +53,10 @@
     </div>
 </template>
 <script >
+import SideMenuItem from './SideMenuItem.vue'
 export default {
   name: "Main",
+  components:{SideMenuItem},
   data() {
     return {
       activeMenuName:'pageOne',

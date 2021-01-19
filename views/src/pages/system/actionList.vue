@@ -9,7 +9,7 @@
     <div class="margin-bottom-30 text-left">
         <Button type="primary" @click="add">添加操作</Button>
     </div>
-    <Table ref="table" width="550" border :columns="columns" :data="userList">
+    <Table ref="table" width="550" border :columns="columns" :data="actionList">
         <template slot-scope="props" slot="action">
             <Button @click.native="modify(props.rowInfo)" type="text" class="fix-table-btn pointer" target="_blank" icon="ios-create-outline" size="small">修改</Button>
         </template>
@@ -17,14 +17,13 @@
     <Modal
         v-model="showModal"
         :title="actionId?'修改操作':'添加操作'"
-        @on-ok="confirm"
-        @on-visible-change="modalStatusChange">
-        <Form :model="formData" label-position="left" :label-width="60">
+        @on-ok="confirm">
+        <Form :model="formData" label-position="left" :label-width="100">
             <FormItem label="操作名：" required>
                 <Input v-model="formData.title"></Input>
             </FormItem>
             <FormItem label="操作code" required>
-                <Input v-model="formData.info" type="password"></Input>
+                <Input v-model="formData.info"></Input>
             </FormItem>
         </Form>
 
@@ -48,8 +47,8 @@ export default {
             actionList:[],
             columns:[
                 { title: 'id', align: 'center', key: 'id',  minWidth: 110 },
-                { title: '姓名', align: 'center', key: 'name',  minWidth: 110 },
-                { title: '角色', align: 'center', key: 'role',  minWidth: 110 },
+                { title: '操作名', align: 'center', key: 'title',  minWidth: 110 },
+                { title: 'code', align: 'center', key: 'info',  minWidth: 110 },
                 { title: '操作', align: 'center', key: 'action',  minWidth: 110 ,
                     render: (h, params) => {
                         return h('div', this.$refs.table['$scopedSlots'].action({ rowInfo: params.row}))
@@ -76,7 +75,6 @@ export default {
             Object.keys(this.formData).forEach(key=>{
                 row[key] && (self.formData[key] = row[key])
             })
-            this.formData.role = row.role.split("#")
             this.showModal = true
         },
         confirm(){
@@ -85,34 +83,11 @@ export default {
                 params.id = this.actionId
             }
             Object.assign(params,this.formData)
-            params.role = this.formData.role.join("#")
-            this.actionId?this.modifyConfirm(params):this.addConfirm(params)
-        },
-        modifyConfirm(data){
-            this.$fetch({
-                url:'/api/user/setUser',
-                method:'post',
-                data: data
-            }).then(res=>{
-                this.$Message.success( res.data.msg || '修改成功!')
-                window.location.reload()
-            })
-        },
-        addConfirm(data){
-            this.$fetch({
-                url:'/api/user/addUser',
-                method:'post',
-                data: data
-            }).then(res=>{
-                this.$Message.success( res.data.msg || '添加成功!')
-                window.location.reload()
-            })
         }
 
     },
     mounted(){
-        this.getUserList()
-        //
+        this.getActionList()
     }
 
 }

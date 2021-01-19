@@ -19,6 +19,7 @@ router.get('/getPageList', (request, result) => {
 
 //获取左侧菜单栏
 router.post('/getMenuList', (request, result) => { 
+  console.log('get========')
   userDao.getMenuList(request).then((res)=>{
     jsonData(result,res)
   }).catch((err)=>{

@@ -6,7 +6,7 @@
         <Breadcrumb>
             <BreadcrumbItem>系统设置</BreadcrumbItem>
             <BreadcrumbItem>页面列表</BreadcrumbItem>
-            <BreadcrumbItem>{{$t('action.add')}}---{{$t('search')}}</BreadcrumbItem>
+            <BreadcrumbItem>语言===={{$t('action.add')}}(这是模块的翻译) | {{$t('search')}}(这是全局的翻译)</BreadcrumbItem>
         </Breadcrumb>
     </div>
     <div class="margin-bottom-30 text-left">
@@ -57,6 +57,9 @@
                     </Option>
                   </Select>
             </FormItem>
+            <FormItem label="鉴权接口：" required>
+                <Input v-model="formData.api" :icon="formData.icon"></Input>
+            </FormItem>
         </Form>
 
     </Modal>
@@ -77,7 +80,8 @@ export default {
                 name:"",
                 icon:"",
                 parent_id:"",
-                actions:[]
+                actions:[],
+                api:""
             },
             pageList:[],
             parentMenu:[],
@@ -114,6 +118,7 @@ export default {
             this.$fetch({
                 url:'/api/system/getPageList',
             }).then((res=>{
+                console.log(JSON.stringify(res))
                 this.pageList = res.data
             }))
         },

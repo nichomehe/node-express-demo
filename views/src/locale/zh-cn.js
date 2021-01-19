@@ -1,3 +1,3 @@
 export default {
-  search:"查询"
+  "search":"查询"
 }

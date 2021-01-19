@@ -11,7 +11,7 @@ module.exports = {
     sourceMap: sourceMapEnabled,
     extract: isProduction
   }),{
-    i18n: '@kazupon/vue-i18n-loader'
+    i18n: '@kazupon/vue-i18n-loader'   //配置后可以在页面使用 i18n标签引入模块翻译
   }),
   cssSourceMap: sourceMapEnabled,
   cacheBusting: config.dev.cacheBusting,

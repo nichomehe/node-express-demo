@@ -1,6 +1,8 @@
 const RoleList = () => import(/* webpackChunkName: "roleList" */ '@/pages/system/roleList.vue')
 const UserList = () => import(/* webpackChunkName: "userList" */ '@/pages/system/userList.vue')
 const PageList = () => import(/* webpackChunkName: "pageList" */ '@/pages/system/pageList.vue')
+const ActionList = () => import(/* webpackChunkName: "actionList" */ '@/pages/system/actionList.vue')
+
 const Main = () => import(/* webpackChunkName: "main" */ '@/components/Main.vue')
 const PageOne = () => import(/* webpackChunkName: "pageOne" */ '@/pages/pageOne.vue')
 const PageTwo = () => import(/* webpackChunkName: "pageTwo" */ '@/pages/pageTwo.vue')
@@ -14,14 +16,14 @@ export default [
     component: Main,
     icon: 'ios-happy',
     name: 'oneBase',
-    meta: { title: '分类一' },
+    meta: { title: '分类A' },
     children: [
       {
         path: 'pageone',
         name: 'pageOne',
         icon: 'ios-people',
         component: PageOne,
-        meta: { title: '页面一' }
+        meta: { title: '页面a' ,hideMune:true}
       }
     ]
   },
@@ -30,14 +32,14 @@ export default [
     component: Main,
     icon: 'ios-outlet',
     name: 'twoBase',
-    meta: { title: '分类二' },
+    meta: { title: '分类B' },
     children: [
       {
         path: 'pagetwo',
         name: 'pageTwo',
         icon: 'ios-people',
         component: PageTwo,
-        meta: { title: '页面二' }
+        meta: { title: '页面b' }
       }
     ]
   },
@@ -46,14 +48,14 @@ export default [
     component: Main,
     icon: 'logo-octocat',
     name: 'thrBase',
-    meta: { title: '分类三' },
+    meta: { title: '分类C' },
     children: [
       {
         path: 'pagethr',
         name: 'pageThr',
         icon: 'ios-people',
         component: PageThr,
-        meta: { title: '页面三' }
+        meta: { title: '页面c' }
       }
     ]
   },
@@ -62,14 +64,14 @@ export default [
     component: Main,
     icon: 'logo-octocat',
     name: 'fourBase',
-    meta: { title: '分类四' },
+    meta: { title: '分类D' },
     children: [
       {
         path: 'pagefour',
         name: 'pageFour',
         icon: 'ios-people',
         component: PageFour,
-        meta: { title: '页面四' }
+        meta: { title: '页面d' }
       }
     ]
   },
@@ -100,6 +102,13 @@ export default [
         icon: 'ios-book',
         component: PageList,
         meta: { title: '页面列表' }
+      },
+      {
+        path: 'actionList',
+        name: 'actionList',
+        icon: 'ios-build',
+        component: ActionList,
+        meta: { title: '操作列表' }
       }
     ]
   }

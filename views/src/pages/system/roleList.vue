@@ -80,17 +80,21 @@ export default {
         for (let key in self.formData) {
           self.formData[key] = ''
         }
-        this.treeList.forEach(item => {
-          if (item.children && item.children.length) {
-            item.checked = false
-            item.expand = false
-            item.children.forEach(cItem => {
-              item.expand = false
-              cItem.checked = false
-            })
-          }
-        })
+        this.treeList = this.clearChecked(this.treeList)
       }
+    },
+    clearChecked(data){
+      let resData = []
+      data.forEach(item => {
+        let oItem = Object.assign({},item)
+        oItem.checked = false
+        oItem.expand = false
+        if (item.children && item.children.length) {
+          oItem.children = this.clearChecked(oItem.children)
+        }
+        resData.push(oItem)
+      })
+      return resData
     },
     getRoleList() {
       this.$fetch({
